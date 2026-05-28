@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(curl -s \"https://api.anthropic.com/v1/design/h/iy28PtHRUNq4yH68EjxXZg?open_file=site%2Findex.html\")",
+      "Bash(curl -s --compressed \"https://api.anthropic.com/v1/design/h/iy28PtHRUNq4yH68EjxXZg?open_file=site%2Findex.html\" -H \"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\" -H \"Accept-Encoding: identity\")",
+      "Bash(curl -s \"https://api.anthropic.com/v1/design/h/iy28PtHRUNq4yH68EjxXZg?open_file=site%2Findex.html\" -H \"Accept-Encoding: gzip, deflate, br\" -o /tmp/design_output.bin)",
+      "Read(//tmp/**)",
+      "Bash(xxd /tmp/design_output.bin)",
+      "Bash(gunzip)",
+      "Bash(find /tmp/design_extracted/ -type f | sort)",
+      "Read(//private/tmp/design_extracted/**)",
+      "Bash(mkdir -p /tmp/design2)",
+      "Bash(curl -s \"https://api.anthropic.com/v1/design/h/iy28PtHRUNq4yH68EjxXZg?open_file=site%2Findex.html\" -o /tmp/design_raw.tar.gz)",
+      "Bash(tar -tzf /tmp/design_raw.tar.gz)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -v \"https://api.anthropic.com/v1/design/h/iy28PtHRUNq4yH68EjxXZg?open_file=site%2Findex.html\" -o /tmp/design_full.bin)",
+      "Bash(curl -v \"https://api.anthropic.com/v1/design/h/iy28PtHRUNq4yH68EjxXZg\" -o /tmp/design_full2.bin)",
+      "Bash(tar -x -C /tmp/design3)",
+      "Bash(tar -tv)",
+      "Bash(xxd /tmp/raw_response.bin)",
+      "Bash(tar -x -C /tmp/design_final)",
+      "Bash(npm install *)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}

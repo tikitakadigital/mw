@@ -1,0 +1,100 @@
+name: Build & Deploy to cPanel
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build
+        run: npm run build
+
+      - name: Inject deploy secret into webhook script
+        env:
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+        run: sed -i "s/%%DEPLOY_SECRET%%/${DEPLOY_SECRET}/" out/_deploy.php
+
+      - name: Package and deploy via PHP webhook
+        run: |
+          TS=$(date +%s)
+          ZIP_FILE="deploy_${TS}.zip"
+
+          # Zip the static export
+          (cd out && zip -r /tmp/${ZIP_FILE} .)
+
+          # Upload ZIP to cPanel home directory
+          UPLOAD=$(curl -sS -X POST \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/Fileman/upload_files" \
+            -F "dir=/home/${{ secrets.CPANEL_USER }}" \
+            -F "file-1=@/tmp/${ZIP_FILE};filename=${ZIP_FILE}")
+          echo "Upload: $UPLOAD"
+
+          # Bootstrap .htaccess via Fileman
+          BOOT_HT=$(curl -sS -X POST \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/Fileman/save_file_content" \
+            --data-urlencode "dir=/home/${{ secrets.CPANEL_USER }}/public_html" \
+            --data-urlencode "file=.htaccess" \
+            --data-urlencode "content@out/.htaccess" \
+            -d "charset=utf-8")
+          echo "Bootstrap .htaccess: $BOOT_HT"
+
+          # Bootstrap _deploy.php via Fileman
+          BOOT=$(curl -sS -X POST \
+            -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
+            "https://${{ secrets.CPANEL_HOST }}:2083/execute/Fileman/save_file_content" \
+            --data-urlencode "dir=/home/${{ secrets.CPANEL_USER }}/public_html" \
+            --data-urlencode "file=_deploy.php" \
+            --data-urlencode "content@out/_deploy.php" \
+            -d "charset=utf-8")
+          echo "Bootstrap _deploy.php: $BOOT"
+
+          # Trigger webhook — PHP reads ZIP, extracts, fixes perms, cleans up
+          RESP=$(curl -sS \
+            -H "X-Deploy-Secret: ${{ secrets.DEPLOY_SECRET }}" \
+            -H "X-Deploy-File: ${ZIP_FILE}" \
+            --max-time 180 \
+            https://www.mallorcawedding.co.uk/_deploy.php)
+          echo "Deploy: $RESP"
+
+          # Verify site is up
+          HTTP=$(curl -s -o /dev/null -w "%{http_code}" https://www.mallorcawedding.co.uk)
+          echo "Site: $HTTP"
+
+          # Purge Cloudflare cache (once Cloudflare is set up)
+          if [ "$HTTP" = "200" ] && [ -n "${{ secrets.CLOUDFLARE_ZONE_ID }}" ]; then
+            CF_PURGE=$(curl -sS -X POST \
+              "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              --data '{"purge_everything":true}')
+            echo "Cloudflare purge: $CF_PURGE"
+          fi
+
+          # Ping IndexNow after successful deploy
+          if [ "$HTTP" = "200" ]; then
+            URLS=$(python3 -c "import xml.etree.ElementTree as ET,json; root=ET.parse('out/sitemap.xml').getroot(); ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}; urls=[u.find('s:loc',ns).text for u in root.findall('s:url',ns) if u.find('s:loc',ns) is not None]; print(json.dumps(urls))")
+            echo "Submitting $(echo $URLS | python3 -c 'import sys,json; print(len(json.load(sys.stdin)))') URLs to IndexNow"
+            INDEXNOW=$(curl -sS -X POST "https://api.indexnow.org/indexnow" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d "{\"host\":\"www.mallorcawedding.co.uk\",\"key\":\"e3a7f9b2d4c6e1a8f0b3d5c7e9a2b4d6\",\"keyLocation\":\"https://www.mallorcawedding.co.uk/e3a7f9b2d4c6e1a8f0b3d5c7e9a2b4d6.txt\",\"urlList\":${URLS}}")
+            echo "IndexNow: $INDEXNOW"
+          fi
