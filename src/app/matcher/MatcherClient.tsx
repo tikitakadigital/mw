@@ -542,6 +542,9 @@ function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherD
   const emailSent = typeof window !== 'undefined'
     ? (window as unknown as Record<string, boolean>)['__matcherEmailSent'] ?? false
     : false;
+  const refinedEmailSent = typeof window !== 'undefined'
+    ? (window as unknown as Record<string, boolean>)['__matcherRefinedEmailSent'] ?? false
+    : false;
 
   const scored = PLANNERS.map((p: typeof PLANNERS[0]) => {
     let score = 50;
@@ -558,6 +561,27 @@ function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherD
     return { p, score };
   }).sort((a, b) => b.score - a.score);
   const top = scored.slice(0, 3);
+
+  // Phase 2 refined email
+  if (refined && !refinedEmailSent && data.name && data.email && estimate && typeof window !== 'undefined') {
+    (window as unknown as Record<string, boolean>)['__matcherRefinedEmailSent'] = true;
+    fetch('/api/matcher-refined.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.name, email: data.email,
+        guests: data.guests, month: data.month, year: data.year,
+        venueName: estimate.venue.name,
+        estimateLow: estimate.low.toLocaleString(),
+        estimateHigh: estimate.high.toLocaleString(),
+        tierName: complexity?.tier.name ?? '',
+        tierDesc: complexity?.tier.desc ?? '',
+        complexityScore: complexity?.score ?? 0,
+        addOns: estimate.addOns,
+        planners: top.map(({ p }) => ({ id: p.id, name: p.name, firm: p.firm, location: p.location, price: p.price })),
+      }),
+    }).catch(() => {});
+  }
 
   // Send email once on first load of results (phase 1 only)
   if (!refined && !emailSent && data.name && data.email && typeof window !== 'undefined') {
@@ -586,12 +610,15 @@ function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherD
         <div className="wrap--narrow" style={{ padding: '0 32px 24px' }}>
           <div className="refine-prompt">
             <div>
-              <span className="kicker kicker--brand">Want a sharper estimate?</span>
-              <h3 className="serif-h3" style={{ marginTop: 4 }}>Answer 6 more questions for a personalised total and a planner-tier recommendation.</h3>
-              <p className="body-md muted" style={{ marginTop: 8 }}>30 more seconds. Optional.</p>
+              <span className="kicker kicker--brand">Your estimate is missing £15–40k</span>
+              <h3 className="serif-h3" style={{ marginTop: 6 }}>The number above covers venue, catering and infrastructure — not florals, music, photography or your welcome dinner.</h3>
+              <p className="body-md" style={{ marginTop: 10, color: 'var(--body)' }}>
+                Answer 6 more questions to see your <strong>real all-in number</strong> and find out exactly which tier of planner your wedding needs — full-service or just coordination.
+              </p>
+              <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', marginTop: 8 }}>30 seconds. We&apos;ll email you the full breakdown.</p>
             </div>
-            <button className="btn btn--primary btn--lg" onClick={onRefine} type="button">
-              <Icon name="sparkle" size={14} /> Refine my estimate
+            <button className="btn btn--primary btn--lg" onClick={onRefine} type="button" style={{ flexShrink: 0 }}>
+              <Icon name="sparkle" size={14} /> See my real number
             </button>
           </div>
         </div>
