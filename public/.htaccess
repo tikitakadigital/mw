@@ -1,10 +1,5 @@
 Options -Indexes
 
-# ── Password protection (remove when site goes live) ──
-AuthType Basic
-AuthName "Mallorca Wedding Preview"
-AuthUserFile /home2/mallorcaweddingc/.htpasswd
-Require valid-user
 
 # 404 page
 ErrorDocument 404 /404.html
