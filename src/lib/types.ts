@@ -1,6 +1,33 @@
-export interface Service {
-  title: string;
+export interface Specialism {
+  ico: string;
+  t: string;
+  s: string;
+}
+
+export interface ServicePackage {
+  tier: string;
+  price: string;
+  popular?: boolean;
+  bullets: string[];
+}
+
+export interface ProcessStep {
+  n: string;
+  t: string;
+  s: string;
+}
+
+export interface PlannerReview {
+  name: string;
+  date: string;
+  guests: number;
+  venue: string;
   body: string;
+}
+
+export interface FAQ {
+  q: string;
+  a: string;
 }
 
 export interface Planner {
@@ -23,13 +50,23 @@ export interface Planner {
   img: string;
   featured: boolean;
   tagline: string;
+  signatureLine?: string;
   bio: string;
   languages: string[];
   based: string;
   response: string;
+  avgResponse?: string;
+  weddingsPerYear?: string;
+  instagram?: string;
+  nextAvailable?: string;
+  deposit?: string;
   badges: string[];
   photos: string[];
-  services: Service[];
+  specialisms?: Specialism[];
+  services: ServicePackage[];
+  process?: ProcessStep[];
+  reviewsData?: PlannerReview[];
+  faqs?: FAQ[];
   preferredVenues: string[];
   yearsActive: number;
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Icon from '@/components/Icon';
+import { VENUES, REAL_WEDDINGS } from '@/lib/data';
 import type { Planner, Venue } from '@/lib/types';
 
 interface Props {
@@ -13,186 +14,369 @@ interface Props {
 
 export default function PlannerProfileClient({ planner: p, preferredVenues }: Props) {
   const [showEnquiry, setShowEnquiry] = useState(false);
+  const [lightbox, setLightbox] = useState<number | null>(null);
+
+  const photos       = p.photos ?? [];
+  const specialisms  = p.specialisms ?? [];
+  const services     = p.services ?? [];
+  const process      = p.process ?? [];
+  const reviewsData  = p.reviewsData ?? [];
+  const faqs         = p.faqs ?? [];
+  const signatureLine  = p.signatureLine ?? p.tagline;
+  const weddingsPerYear = p.weddingsPerYear ?? `${p.reviews}+ weddings`;
+  const avgResponse    = p.avgResponse ?? p.response.replace(/^\d+%\s*within\s*/, '');
+  const instagram      = p.instagram ?? null;
+  const nextAvailable  = p.nextAvailable ?? 'Reply within 24h with availability';
+  const deposit        = p.deposit ?? 'Deposit confirms your date';
+  const firstName      = p.name.split(' ')[0];
+
+  const realWeddings = REAL_WEDDINGS.filter(w => w.plannerId === p.id);
 
   return (
-    <div className="mw-profile" style={{ paddingTop: 0, marginTop: 0 }}>
-      {/* Breadcrumb */}
-      <div className="mw-profile__topline">
-        <Link href="/planners" className="mw-profile__back">
-          <Icon name="arrow-l" size={16} /> All planners
+    <main>
+      {/* Topline */}
+      <div className="pp-topline">
+        <Link href="/planners" className="pp-back">
+          <Icon name="arrow-l" size={14} /> All planners
         </Link>
-        <div className="mw-profile__actions">
-          <button className="mw-profile__act" type="button"><Icon name="share" size={14} /> Share</button>
-          <button className="mw-profile__act" type="button"><Icon name="heart" size={14} /> Save</button>
+        <div className="pp-actions">
+          <button className="pp-act" type="button"><Icon name="share" size={14} /> Share</button>
+          <button className="pp-act" type="button"><Icon name="heart" size={14} /> Save</button>
         </div>
       </div>
 
-      {/* Photo banner */}
-      <section style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 8, maxWidth: 1200, margin: '0 auto', padding: '0 32px', height: 480, overflow: 'hidden' }}>
-        <div style={{ overflow: 'hidden', borderRadius: '12px 0 0 12px', minHeight: 0 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={p.photos[0] || p.img} alt={p.firm} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        </div>
-        <div style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: 8, minHeight: 0 }}>
-          <div style={{ overflow: 'hidden', borderRadius: '0 12px 0 0', minHeight: 0 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={p.photos[1] || p.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          </div>
-          <div style={{ overflow: 'hidden', borderRadius: '0 0 12px 0', minHeight: 0 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={p.photos[2] || p.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          </div>
-        </div>
-      </section>
+      {/* Hero — identity left, gallery right */}
+      <section className="pp-hero">
+        <div className="pp-hero__copy">
+          <span className="kicker">{p.location} · {p.style}</span>
+          <h1 className="pp-hero__name">{p.name}</h1>
+          <p className="pp-hero__firm">{p.firm}</p>
+          <p className="pp-hero__sig">&ldquo;{signatureLine}&rdquo;</p>
 
-      {/* Title */}
-      <header className="mw-profile__head">
-        <span className="kicker">{p.location} · {p.style}</span>
-        <h1>{p.tagline}</h1>
-        <div className="mw-profile__stats">
-          <span><Icon name="star" size={14} /> {p.rating}</span>
-          <span>·</span>
-          <span>{p.reviews} weddings on Mallorca Wedding</span>
-          <span>·</span>
-          <span>{p.based}</span>
-        </div>
-      </header>
+          <div className="pp-hero__badges">
+            {p.badges.map(b => (
+              <span key={b} className={`pp-badge ${b.toLowerCase().includes('verified') ? 'pp-badge--verified' : ''}`}>
+                {b.toLowerCase().includes('verified')
+                  ? <Icon name="check" size={12} stroke={2.4} />
+                  : <Icon name="star" size={12} />}
+                {b}
+              </span>
+            ))}
+          </div>
 
-      {/* Body */}
-      <section className="mw-profile__body">
-        <div className="mw-profile__main">
-          <div className="mw-profile__intro">
-            <div className="mw-profile__avatar"><span>{p.name[0]}</span></div>
-            <div>
-              <h3>Planned by {p.name}</h3>
-              <p className="mw-profile__intro-sub">{p.firm} · {p.languages.join(' · ')} · {p.response}</p>
+          {/* Stats strip */}
+          <div className="pp-stats">
+            <div className="pp-stats__item">
+              <strong>{p.rating}<small> ★</small></strong>
+              <span>{p.reviews} reviews</span>
             </div>
-            {p.badges.includes('Verified') && (
-              <span className="mw-profile__verify"><Icon name="check" size={12} /> Verified planner</span>
+            <div className="pp-stats__item">
+              <strong>{p.yearsActive}<small> yrs</small></strong>
+              <span>on the island</span>
+            </div>
+            <div className="pp-stats__item">
+              <strong>{weddingsPerYear.split(' ')[0]}</strong>
+              <span>weddings / year</span>
+            </div>
+            <div className="pp-stats__item">
+              <strong>{avgResponse}</strong>
+              <span>avg response</span>
+            </div>
+            <div className="pp-stats__item">
+              <strong>{p.languages.length}</strong>
+              <span>languages</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Airbnb-style 5-photo gallery */}
+        {photos.length > 0 && (
+          <div className="pp-gallery">
+            <button type="button" className="pp-gallery__main" onClick={() => setLightbox(0)}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={photos[0]} alt={p.firm} />
+            </button>
+            <div className="pp-gallery__grid">
+              {[1, 2, 3, 4].map(i => (
+                <button key={i} type="button" className="pp-gallery__cell"
+                  style={{ visibility: photos[i] ? 'visible' : 'hidden' }}
+                  onClick={() => setLightbox(i)}>
+                  {photos[i] && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={photos[i]} alt="" />
+                  )}
+                </button>
+              ))}
+            </div>
+            {photos.length > 5 && (
+              <button type="button" className="pp-gallery__more" onClick={() => setLightbox(0)}>
+                <Icon name="camera" size={14} /> All {photos.length} photos
+              </button>
             )}
           </div>
+        )}
+      </section>
 
-          <hr className="mw-profile__rule" />
-          <h3>About {p.firm}</h3>
-          <p>{p.bio}</p>
+      {/* Body */}
+      <section className="pp-body">
+        <div className="pp-main">
 
-          <hr className="mw-profile__rule" />
-          <h3>What&apos;s offered</h3>
-          <ul className="mw-services">
-            {p.services.map((s, i) => {
-              const priceMatch = s.body.match(/From £[\d,]+/);
-              const price = priceMatch ? priceMatch[0] : '';
-              const bodyText = s.body.replace(/From £[\d,]+\.\s*/, '');
-              return (
-                <li key={i}>
-                  <span className="mw-services__title">{s.title}</span>
-                  {price && <span style={{ font: '600 14px/1 var(--font-body)', color: 'var(--ink)', whiteSpace: 'nowrap' }}>{price}</span>}
-                  <span className="mw-services__body">{bodyText}</span>
-                </li>
-              );
-            })}
-          </ul>
+          {/* About */}
+          <div className="pp-section" style={{ borderTop: 'none', paddingTop: 0 }}>
+            <h2>Meet {firstName}</h2>
+            <p style={{ font: 'var(--t-body-lg)', color: 'var(--body)', marginTop: 16, lineHeight: 1.7 }}>{p.bio}</p>
+            <div className="pp-meta-line">
+              <span><Icon name="globe" size={14} /> Speaks {p.languages.join(' · ')}</span>
+              <span><Icon name="pin" size={14} /> Based {p.based}</span>
+              {instagram && <span><Icon name="camera" size={14} /> {instagram}</span>}
+            </div>
+          </div>
 
-          {preferredVenues.length > 0 && (
-            <>
-              <hr className="mw-profile__rule" />
-              <h3>Venues {p.name.split(' ')[0]} regularly works at</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginTop: 12 }}>
-                {preferredVenues.map(v => (
-                  <Link key={v.id} href={`/venue/${v.id}`} className="cost-card" style={{ flexDirection: 'row' }}>
-                    <div style={{ width: 100, flexShrink: 0, aspectRatio: '1', overflow: 'hidden' }}>
-                      <Image src={v.img} alt={v.name} width={100} height={100} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+          {/* Specialisms */}
+          {specialisms.length > 0 && (
+            <div className="pp-section">
+              <h2>{firstName} is known for</h2>
+              <div className="pp-spec-grid">
+                {specialisms.map((s, i) => (
+                  <div key={i} className="pp-spec">
+                    <div className="pp-spec__ico"><Icon name={s.ico} size={18} /></div>
+                    <h4>{s.t}</h4>
+                    <p>{s.s}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Services */}
+          {services.length > 0 && (
+            <div className="pp-section">
+              <h2>Services &amp; packages</h2>
+              <p style={{ font: 'var(--t-body-md)', color: 'var(--muted)', marginTop: 8 }}>
+                All fees are flat — no supplier commissions.
+              </p>
+              <div className="pp-services">
+                {services.map((s, i) => (
+                  <div key={i} className={`pp-service ${s.popular ? 'pp-service--popular' : ''}`}>
+                    {s.popular && <span className="pp-service__badge">Most chosen</span>}
+                    <h3>{s.tier}</h3>
+                    <div className="pp-service__price">{s.price}</div>
+                    <ul>
+                      {s.bullets.map((b, j) => (
+                        <li key={j}><Icon name="check" size={14} /> <span>{b}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Process */}
+          {process.length > 0 && (
+            <div className="pp-section">
+              <h2>How {firstName} works</h2>
+              <ol className="pp-process">
+                {process.map((step, i) => (
+                  <li key={i}>
+                    <span className="pp-process__num">{step.n}</span>
+                    <div>
+                      <h4>{step.t}</h4>
+                      <p>{step.s}</p>
                     </div>
-                    <div className="cost-card__body" style={{ padding: 12 }}>
-                      <h4 className="cost-card__name" style={{ fontSize: 17 }}>{v.name}</h4>
-                      <p className="cost-card__meta">{v.region}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {/* Real weddings by this planner */}
+          {realWeddings.length > 0 && (
+            <div className="pp-section">
+              <h2>Recent weddings by {firstName}</h2>
+              <p style={{ font: 'var(--t-body-md)', color: 'var(--muted)', marginTop: 8, marginBottom: 0 }}>
+                Real weddings — real numbers — that {firstName} planned.
+              </p>
+              <div className="pp-real-weddings">
+                {realWeddings.map(w => (
+                  <Link key={w.slug} href={`/real-weddings/${w.slug}`} className="pp-real-card">
+                    <div className="pp-real-card__photo">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={w.photos[0]} alt={`${w.couple} at ${w.venueName}`} />
+                    </div>
+                    <div className="pp-real-card__body">
+                      <span className="kicker">{w.month} · {w.venueName}</span>
+                      <h4>{w.couple}</h4>
+                      <p>{w.guests} guests · {w.totalRange}</p>
                     </div>
                   </Link>
                 ))}
               </div>
-            </>
+            </div>
           )}
 
-          <hr className="mw-profile__rule" />
-          <h3>What past couples say</h3>
-          <div className="mw-reviews">
-            <article>
-              <div className="mw-reviews__rating">
-                <span className="mw-reviews__num">{p.rating}</span>
-                <span className="mw-reviews__sub">Guest favourite · {p.reviews} reviews</span>
+          {/* Preferred venues */}
+          {preferredVenues.length > 0 && (
+            <div className="pp-section">
+              <h2>Venues {firstName} regularly works at</h2>
+              <div className="pp-venues">
+                {preferredVenues.map(v => (
+                  <Link key={v.id} href={`/venue/${v.id}`} className="pp-venue-card">
+                    <div className="pp-venue-card__photo">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={v.img} alt={v.name} />
+                    </div>
+                    <div>
+                      <h4>{v.name}</h4>
+                      <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', margin: '3px 0' }}>{v.region}</p>
+                      <p style={{ font: 'var(--t-body-sm)', color: 'var(--ink)', margin: 0 }}>
+                        €{(v.estTotal80.low / 1000).toFixed(0)}–€{(v.estTotal80.high / 1000).toFixed(0)}k{' '}
+                        <span style={{ color: 'var(--muted)' }}>for 80g</span>
+                      </p>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </article>
-            {[
-              { init: 'K', name: 'Kate & James', date: 'May 2025 · 38 guests', text: `Quietly competent. ${p.name.split(' ')[0]} made the day feel like an afternoon at a friend's house — which is exactly what we asked for.` },
-              { init: 'D', name: 'Daisy & Tom', date: 'Sep 2024 · 52 guests', text: 'We were planning from London and had no idea where to start. Three months in we already trusted them more than ourselves.' },
-              { init: 'R', name: 'Ruth & Mark', date: 'Jun 2024 · 64 guests', text: 'Five days of "this is handled" in a row. Worth every penny. Would recommend to anyone planning from outside Spain.' },
-            ].map((r, i) => (
-              <article key={i}>
-                <header>
-                  <span className="mw-profile__avatar mw-profile__avatar--sm"><span>{r.init}</span></span>
-                  <div>
-                    <strong>{r.name}</strong>
-                    <span className="mw-reviews__date">{r.date}</span>
-                  </div>
-                </header>
-                <p>{r.text}</p>
-              </article>
-            ))}
+            </div>
+          )}
+
+          {/* Reviews */}
+          <div className="pp-section">
+            <div className="pp-reviews-header">
+              <h2>
+                <Icon name="star" size={20} /> {p.rating} · {p.reviews} reviews
+              </h2>
+              <a className="t-link" href="#" onClick={e => e.preventDefault()}>
+                See all <Icon name="arrow" size={12} />
+              </a>
+            </div>
+            {reviewsData.length > 0 ? (
+              <div className="pp-reviews">
+                {reviewsData.map((r, i) => (
+                  <article key={i} className="pp-review">
+                    <header>
+                      <span className="pp-review__avatar">{r.name[0]}</span>
+                      <div>
+                        <strong>{r.name}</strong>
+                        <span>{r.date} · {r.guests} guests · {r.venue}</span>
+                      </div>
+                    </header>
+                    <p>&ldquo;{r.body}&rdquo;</p>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="mw-reviews" style={{ marginTop: 20 }}>
+                {[
+                  { init: 'K', name: 'Kate & James', date: 'May 2025 · 38 guests', text: `Quietly competent. ${firstName} made the day feel like an afternoon at a friend's house — which is exactly what we asked for.` },
+                  { init: 'D', name: 'Daisy & Tom', date: 'Sep 2024 · 52 guests', text: 'We were planning from London and had no idea where to start. Three months in we already trusted them more than ourselves.' },
+                  { init: 'R', name: 'Ruth & Mark', date: 'Jun 2024 · 64 guests', text: 'Five days of "this is handled" in a row. Worth every penny. Would recommend to anyone planning from outside Spain.' },
+                ].map((r, i) => (
+                  <article key={i}>
+                    <header>
+                      <span className="mw-profile__avatar mw-profile__avatar--sm"><span>{r.init}</span></span>
+                      <div><strong>{r.name}</strong><span className="mw-reviews__date">{r.date}</span></div>
+                    </header>
+                    <p>{r.text}</p>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
+
+          {/* Map */}
+          <div className="pp-section">
+            <h2>Where {firstName} is based</h2>
+            <div className="pp-map">
+              <div className="pp-map__plate" style={{ background: 'linear-gradient(135deg, #c4c19a 0%, #7e8a5f 60%, #3c4326 100%)' }} />
+              <div className="pp-map__pin"><Icon name="pin" size={16} /></div>
+              <span className="pp-map__caption">{p.based} · exact address shared after first call</span>
+            </div>
+          </div>
+
+          {/* FAQs */}
+          {faqs.length > 0 && (
+            <div className="pp-section">
+              <h2>Frequently asked, answered</h2>
+              <div className="faq" style={{ marginTop: 16 }}>
+                {faqs.map((f, i) => (
+                  <details key={i} className="faq-item" open={i === 0}>
+                    <summary className="faq-item__q">{f.q}</summary>
+                    <p className="faq-item__a">{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Sticky rail */}
-        <aside className="mw-profile__rail">
-          <div className="mw-book">
-            <div className="mw-book__price">
-              From <em>{p.price.split('–')[0]}</em>
-              <span className="mw-book__per"> · full planning</span>
+        <aside className="pp-rail">
+          <div className="pp-book">
+            <div className="pp-book__price">
+              <span>From <strong>{p.price.split('–')[0]}</strong></span>
+              <span className="pp-book__per">Full planning · flat fee</span>
             </div>
-            <div className="mw-book__row">
-              <div className="mw-book__seg">
-                <span className="lbl">Wedding date</span>
-                <span className="val">Sat 14 Jun 2026</span>
-              </div>
-              <div className="mw-book__seg">
-                <span className="lbl">Guests</span>
-                <span className="val">40 guests</span>
-              </div>
-            </div>
-            <button className="btn btn--primary" style={{ width: '100%' }} onClick={() => setShowEnquiry(true)} type="button">
-              Request a call
+            <button
+              className="btn btn--primary"
+              style={{ width: '100%', marginBottom: 8 }}
+              onClick={() => setShowEnquiry(true)}
+              type="button"
+            >
+              Request a call with {firstName}
             </button>
-            <p className="mw-book__meta">
-              You won&apos;t be charged. {p.name.split(' ')[0]} replies within {p.response.replace(/^\d+%\s*within\s*/, '')}.
+            <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', textAlign: 'center', margin: '0 0 16px' }}>
+              Free · No obligation · {firstName} replies in ~{avgResponse}
             </p>
-            <hr className="mw-profile__rule" />
-            <div className="mw-book__line"><span>Planning fee</span><span>From {p.price.split('–')[0]}</span></div>
-            <div className="mw-book__line"><span>Estimated supplier spend</span><span>£15,000–35,000</span></div>
-            <div className="mw-book__line mw-book__line--total"><span>Estimated total</span><span>{p.price}</span></div>
+            <hr className="pp-book__rule" />
+            <dl className="pp-book__meta">
+              <dt>Availability</dt><dd>{nextAvailable}</dd>
+              <dt>Wedding range</dt><dd>{p.guests} guests</dd>
+              <dt>Budget range</dt><dd>{p.price}</dd>
+              <dt>Languages</dt><dd>{p.languages.join(' · ')}</dd>
+              <dt>Deposit</dt><dd>{deposit}</dd>
+              <dt>Response</dt><dd>{p.response}</dd>
+            </dl>
+            {instagram && (
+              <a className="btn btn--secondary" href="#" onClick={e => e.preventDefault()}
+                style={{ width: '100%', marginTop: 12, justifyContent: 'center' }}>
+                <Icon name="camera" size={14} /> {instagram}
+              </a>
+            )}
           </div>
 
-          <div style={{ marginTop: 16, padding: 20, background: 'var(--surface-soft)', border: '1px solid var(--hairline)', borderRadius: 'var(--radius-md)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="pp-vetted">
+            <div className="pp-vetted__head">
               <Icon name="shield" size={18} />
-              <strong style={{ font: 'var(--t-body-sm)', fontWeight: 600 }}>Vetted in person, on the island</strong>
+              <strong>Vetted in person, on the island</strong>
             </div>
-            <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', margin: '8px 0 0' }}>
-              We meet every planner before listing. Portfolio, references, and venue relationships are checked.
-            </p>
+            <p>We meet every planner before listing. Portfolio audit + reference calls + a 90-minute meeting in Palma.</p>
+            <Link href="/standards" className="t-link" style={{ font: 'var(--t-body-sm)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              Our editorial standards <Icon name="arrow" size={12} />
+            </Link>
           </div>
         </aside>
       </section>
 
+      {/* Enquiry modal */}
       {showEnquiry && <EnquiryModal planner={p} onClose={() => setShowEnquiry(false)} />}
-    </div>
+
+      {/* Lightbox */}
+      {lightbox !== null && (
+        <Lightbox photos={photos} index={lightbox} onClose={() => setLightbox(null)} setIndex={setLightbox} />
+      )}
+    </main>
   );
 }
 
+/* ─── Enquiry modal ─── */
 function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () => void }) {
   const [step, setStep] = useState(1);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [d, setD] = useState({ name: '', email: '', date: '', guests: '', style: '', message: '' });
   const set = (k: keyof typeof d, v: string) => setD(prev => ({ ...prev, [k]: v }));
+  const firstName = p.name.split(' ')[0];
 
   const handleSend = async () => {
     setSending(true);
@@ -221,9 +405,9 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
             <span style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--primary-soft)', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
               <Icon name="check" size={24} stroke={2.4} />
             </span>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 28, marginBottom: 12 }}>Request sent to {p.name.split(' ')[0]}.</h3>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 28, marginBottom: 12 }}>Request sent to {firstName}.</h3>
             <p style={{ font: 'var(--t-body-md)', color: 'var(--body)', maxWidth: 360, margin: '0 auto 24px' }}>
-              {p.name.split(' ')[0]} will reply within {p.response.replace(/^\d+%\s*within\s*/, '')}. We&apos;ve also emailed you a copy.
+              {firstName} will reply within {p.response.replace(/^\d+%\s*within\s*/, '')}. We&apos;ve also emailed you a copy.
             </p>
             <button className="btn btn--primary" onClick={onClose} type="button">Done</button>
           </div>
@@ -238,7 +422,7 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
       <div className="mw-modal__panel" role="dialog" aria-modal="true">
         <header className="mw-modal__head">
           <button className="mw-modal__close" onClick={onClose} aria-label="Close" type="button"><Icon name="close" size={16} /></button>
-          <span className="mw-modal__title">Request a call with {p.name.split(' ')[0]}</span>
+          <span className="mw-modal__title">Request a call with {firstName}</span>
           <span className="mw-modal__step">Step {step} of 3</span>
         </header>
         <div className="mw-modal__progress">
@@ -248,7 +432,7 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
           {step === 1 && (
             <>
               <h3>Your details</h3>
-              <p className="mw-modal__sub">So {p.name.split(' ')[0]} knows who to reply to.</p>
+              <p className="mw-modal__sub">So {firstName} knows who to reply to.</p>
               <label className="label">Your name</label>
               <input className="input" type="text" placeholder="e.g. Sarah" value={d.name} onChange={e => set('name', e.target.value)} />
               <div style={{ height: 12 }} />
@@ -276,7 +460,7 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
           )}
           {step === 3 && (
             <>
-              <h3>A short note to {p.name.split(' ')[0]}</h3>
+              <h3>A short note to {firstName}</h3>
               <p className="mw-modal__sub">Anything to share before the call. Optional.</p>
               <textarea className="input" rows={6} placeholder="We're getting married in June and looking for a 30-guest day on the north of the island." value={d.message} onChange={e => set('message', e.target.value)} />
             </>
@@ -291,6 +475,20 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
             : <button className="btn btn--primary" onClick={handleSend} disabled={sending} type="button">{sending ? 'Sending…' : 'Send request'}</button>}
         </footer>
       </div>
+    </div>
+  );
+}
+
+/* ─── Lightbox ─── */
+function Lightbox({ photos, index, onClose, setIndex }: { photos: string[]; index: number; onClose: () => void; setIndex: (i: number) => void }) {
+  return (
+    <div className="vlb" role="dialog" aria-modal="true" onClick={onClose}>
+      <button className="vlb__close" onClick={e => { e.stopPropagation(); onClose(); }} aria-label="Close" type="button"><Icon name="close" size={18} /></button>
+      <button className="vlb__nav vlb__nav--prev" onClick={e => { e.stopPropagation(); setIndex((index - 1 + photos.length) % photos.length); }} aria-label="Previous" type="button"><Icon name="arrow-l" size={18} /></button>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="vlb__img" src={photos[index]} alt="" onClick={e => e.stopPropagation()} />
+      <button className="vlb__nav vlb__nav--next" onClick={e => { e.stopPropagation(); setIndex((index + 1) % photos.length); }} aria-label="Next" type="button"><Icon name="arrow" size={18} /></button>
+      <span className="vlb__count">{index + 1} / {photos.length}</span>
     </div>
   );
 }
