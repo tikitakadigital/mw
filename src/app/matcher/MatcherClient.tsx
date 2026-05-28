@@ -539,8 +539,11 @@ function StepLogistics({ data, set }: { data: MatcherData; set: SetFn }) {
 function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherData; refined: boolean; onRefine: () => void; onRestart: () => void }) {
   const estimate = computeEstimate(data);
   const complexity = refined ? complexityScore(data) : null;
+  const emailSent = typeof window !== 'undefined'
+    ? (window as unknown as Record<string, boolean>)['__matcherEmailSent'] ?? false
+    : false;
 
-  const scored = PLANNERS.map(p => {
+  const scored = PLANNERS.map((p: typeof PLANNERS[0]) => {
     let score = 50;
     if (p.minGuests <= data.guests && p.maxGuests >= data.guests) score += 15; else score -= 10;
     if (p.minBudget <= data.budget && p.maxBudget >= data.budget) score += 18; else score -= 8;
@@ -555,6 +558,21 @@ function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherD
     return { p, score };
   }).sort((a, b) => b.score - a.score);
   const top = scored.slice(0, 3);
+
+  // Send email once on first load of results (phase 1 only)
+  if (!refined && !emailSent && data.name && data.email && typeof window !== 'undefined') {
+    (window as unknown as Record<string, boolean>)['__matcherEmailSent'] = true;
+    fetch('/api/matcher.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.name, email: data.email,
+        guests: data.guests, month: data.month, year: data.year,
+        budget: data.budget, venueName: estimate?.venue?.name ?? '',
+        planners: top.map(({ p }) => ({ id: p.id, name: p.name, firm: p.firm, location: p.location, price: p.price })),
+      }),
+    }).catch(() => {});
+  }
 
   return (
     <div style={{ background: 'var(--canvas)', minHeight: '100vh', paddingTop: 'var(--nav-h)' }}>

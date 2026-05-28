@@ -181,8 +181,27 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
 function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () => void }) {
   const [step, setStep] = useState(1);
   const [sent, setSent] = useState(false);
-  const [d, setD] = useState({ date: '', guests: '', style: '', message: '' });
+  const [sending, setSending] = useState(false);
+  const [d, setD] = useState({ name: '', email: '', date: '', guests: '', style: '', message: '' });
   const set = (k: keyof typeof d, v: string) => setD(prev => ({ ...prev, [k]: v }));
+
+  const handleSend = async () => {
+    setSending(true);
+    try {
+      await fetch('/api/enquiry.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: d.name, email: d.email,
+          plannerName: p.name, plannerId: p.id,
+          date: d.date, guests: d.guests,
+          style: d.style, message: d.message,
+        }),
+      });
+    } catch (_) {}
+    setSending(false);
+    setSent(true);
+  };
 
   if (sent) {
     return (
@@ -219,11 +238,17 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
         <div className="mw-modal__body">
           {step === 1 && (
             <>
-              <h3>When &amp; how many guests?</h3>
-              <p className="mw-modal__sub">{p.name.split(' ')[0]} takes {p.guests} guests in {p.season.toLowerCase()}.</p>
+              <h3>Your details</h3>
+              <p className="mw-modal__sub">So {p.name.split(' ')[0]} knows who to reply to.</p>
+              <label className="label">Your name</label>
+              <input className="input" type="text" placeholder="e.g. Sarah" value={d.name} onChange={e => set('name', e.target.value)} />
+              <div style={{ height: 12 }} />
+              <label className="label">Your email</label>
+              <input className="input" type="email" placeholder="sarah@example.com" value={d.email} onChange={e => set('email', e.target.value)} />
+              <div style={{ height: 12 }} />
               <label className="label">Wedding date (or window)</label>
               <input className="input" type="text" placeholder="e.g. Sat 14 Jun 2026" value={d.date} onChange={e => set('date', e.target.value)} />
-              <div style={{ height: 16 }} />
+              <div style={{ height: 12 }} />
               <label className="label">Guest count</label>
               <input className="input" type="text" placeholder="e.g. 40 guests" value={d.guests} onChange={e => set('guests', e.target.value)} />
             </>
@@ -253,8 +278,8 @@ function EnquiryModal({ planner: p, onClose }: { planner: Planner; onClose: () =
             ? <button className="btn btn--ghost" onClick={() => setStep(step - 1)} type="button">Back</button>
             : <span />}
           {step < 3
-            ? <button className="btn btn--primary" onClick={() => setStep(step + 1)} type="button">Continue</button>
-            : <button className="btn btn--primary" onClick={() => setSent(true)} type="button">Send request</button>}
+            ? <button className="btn btn--primary" onClick={() => setStep(step + 1)} disabled={step === 1 && (!d.name || !d.email)} type="button">Continue</button>
+            : <button className="btn btn--primary" onClick={handleSend} disabled={sending} type="button">{sending ? 'Sending…' : 'Send request'}</button>}
         </footer>
       </div>
     </div>

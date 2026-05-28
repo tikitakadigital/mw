@@ -26,10 +26,13 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Inject deploy secret into webhook script
+      - name: Inject secrets
         env:
           DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
-        run: sed -i "s/%%DEPLOY_SECRET%%/${DEPLOY_SECRET}/" out/_deploy.php
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          sed -i "s/%%DEPLOY_SECRET%%/${DEPLOY_SECRET}/" out/_deploy.php
+          find out/api -name "*.php" -exec sed -i "s/%%RESEND_API_KEY%%/${RESEND_API_KEY}/g" {} \;
 
       - name: Package and deploy via PHP webhook
         run: |

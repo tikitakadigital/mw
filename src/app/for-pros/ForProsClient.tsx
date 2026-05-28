@@ -7,6 +7,30 @@ import Icon from '@/components/Icon';
 
 export default function ForProsClient() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSending(true);
+    const form = e.currentTarget;
+    const get = (name: string) => (form.elements.namedItem(name) as HTMLInputElement)?.value ?? '';
+    const styles = Array.from(form.querySelectorAll<HTMLInputElement>('input[type=checkbox]:checked')).map(el => el.value);
+    try {
+      await fetch('/api/apply.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: get('name'), company: get('company'),
+          based: get('based'), languages: get('languages'),
+          minBudget: get('minBudget'), maxGuests: get('maxGuests'),
+          portfolio: get('portfolio'), styles,
+          description: get('description'),
+        }),
+      });
+    } catch (_) {}
+    setSending(false);
+    setSent(true);
+  };
 
   return (
     <>
@@ -187,33 +211,33 @@ export default function ForProsClient() {
             </div>
           ) : (
             <form style={{ display: 'grid', gap: 16, background: 'var(--surface)', padding: 32, borderRadius: 'var(--radius-lg)', border: '1px solid var(--hairline)' }}
-              onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+              onSubmit={handleSubmit}>
               <div className="cols-2" style={{ gap: 16 }}>
-                <div><label className="label">Your name</label><input className="input" type="text" required placeholder="e.g. Sara Llabrés" /></div>
-                <div><label className="label">Company name</label><input className="input" type="text" required placeholder="e.g. Slow Finca" /></div>
+                <div><label className="label">Your name</label><input className="input" name="name" type="text" required placeholder="e.g. Sara Llabrés" /></div>
+                <div><label className="label">Company name</label><input className="input" name="company" type="text" required placeholder="e.g. Slow Finca" /></div>
               </div>
               <div className="cols-2" style={{ gap: 16 }}>
-                <div><label className="label">Based in</label><input className="input" type="text" required placeholder="e.g. Pollença, Mallorca" /></div>
-                <div><label className="label">Languages</label><input className="input" type="text" required placeholder="e.g. English, Castellano, Català" /></div>
+                <div><label className="label">Based in</label><input className="input" name="based" type="text" required placeholder="e.g. Pollença, Mallorca" /></div>
+                <div><label className="label">Languages</label><input className="input" name="languages" type="text" required placeholder="e.g. English, Castellano, Català" /></div>
               </div>
               <div className="cols-2" style={{ gap: 16 }}>
                 <div>
                   <label className="label">Minimum project value</label>
-                  <select className="input">
+                  <select className="input" name="minBudget">
                     <option>Under €40k</option><option>€40–70k</option><option>€70–100k</option><option>€100–150k</option><option>€150k+</option>
                   </select>
                 </div>
-                <div><label className="label">Max guest count</label><input className="input" type="number" placeholder="e.g. 120" /></div>
+                <div><label className="label">Max guest count</label><input className="input" name="maxGuests" type="number" placeholder="e.g. 120" /></div>
               </div>
               <div>
                 <label className="label">Portfolio link (Instagram or website)</label>
-                <input className="input" type="url" placeholder="https://" />
+                <input className="input" name="portfolio" type="url" placeholder="https://" />
               </div>
               <div>
                 <label className="label">Describe your ideal couple</label>
-                <textarea className="input" rows={4} placeholder="e.g. We take 8 weddings a year, mostly 40–80 guests, looking for a planner-led day not a high-production show." />
+                <textarea className="input" name="description" rows={4} placeholder="e.g. We take 8 weddings a year, mostly 40–80 guests, looking for a planner-led day not a high-production show." />
               </div>
-              <button className="btn btn--primary btn--lg" type="submit">Submit application</button>
+              <button className="btn btn--primary btn--lg" type="submit" disabled={sending}>{sending ? 'Sending…' : 'Submit application'}</button>
               <p className="muted" style={{ font: 'var(--t-caption)' }}>By submitting you agree to our planner standards. We&apos;ll never share your details publicly without your approval.</p>
             </form>
           )}
