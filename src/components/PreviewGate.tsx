@@ -27,12 +27,14 @@ export default function PreviewGate({ children }: { children: React.ReactNode })
     }
   };
 
-  // Before hydration — render nothing (avoids flash)
-  if (unlocked === null) return null;
-
-  if (unlocked) return <>{children}</>;
+  // Always render children (so static HTML includes page content)
+  // Overlay sits on top until unlocked
+  const showGate = unlocked === false;
 
   return (
+    <>
+      {children}
+      {!showGate ? null : (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 9999,
       background: '#F6F3EE',
@@ -147,5 +149,7 @@ export default function PreviewGate({ children }: { children: React.ReactNode })
         }
       `}</style>
     </div>
+      )}
+    </>
   );
 }
