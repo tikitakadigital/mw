@@ -43,7 +43,7 @@ jobs:
           UPLOAD=$(curl -sS -X POST \
             -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
             "https://${{ secrets.CPANEL_HOST }}:2083/execute/Fileman/upload_files" \
-            -F "dir=/home/${{ secrets.CPANEL_USER }}" \
+            -F "dir=/home2/${{ secrets.CPANEL_USER }}" \
             -F "file-1=@/tmp/${ZIP_FILE};filename=${ZIP_FILE}")
           echo "Upload: $UPLOAD"
 
@@ -51,7 +51,7 @@ jobs:
           BOOT_HT=$(curl -sS -X POST \
             -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
             "https://${{ secrets.CPANEL_HOST }}:2083/execute/Fileman/save_file_content" \
-            --data-urlencode "dir=/home/${{ secrets.CPANEL_USER }}/public_html" \
+            --data-urlencode "dir=/home2/${{ secrets.CPANEL_USER }}/public_html" \
             --data-urlencode "file=.htaccess" \
             --data-urlencode "content@out/.htaccess" \
             -d "charset=utf-8")
@@ -61,7 +61,7 @@ jobs:
           BOOT=$(curl -sS -X POST \
             -H "Authorization: cpanel ${{ secrets.CPANEL_USER }}:${{ secrets.CPANEL_API_TOKEN }}" \
             "https://${{ secrets.CPANEL_HOST }}:2083/execute/Fileman/save_file_content" \
-            --data-urlencode "dir=/home/${{ secrets.CPANEL_USER }}/public_html" \
+            --data-urlencode "dir=/home2/${{ secrets.CPANEL_USER }}/public_html" \
             --data-urlencode "file=_deploy.php" \
             --data-urlencode "content@out/_deploy.php" \
             -d "charset=utf-8")
