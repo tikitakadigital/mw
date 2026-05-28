@@ -611,7 +611,7 @@ function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherD
           <div className="refine-prompt">
             <div>
               <span className="kicker kicker--brand">Your estimate is missing £15–40k</span>
-              <h3 className="serif-h3" style={{ marginTop: 6 }}>The number above covers venue, catering and infrastructure — not florals, music, photography or your welcome dinner.</h3>
+              <h3 className="serif-h3" style={{ marginTop: 6 }}>The number below covers venue, catering and infrastructure — not florals, music, photography or your welcome dinner.</h3>
               <p className="body-md" style={{ marginTop: 10, color: 'var(--body)' }}>
                 Answer 6 more questions to see your <strong>real all-in number</strong> and find out exactly which tier of planner your wedding needs — full-service or just coordination.
               </p>
