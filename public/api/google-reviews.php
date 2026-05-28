@@ -9,11 +9,14 @@ $id = preg_replace('/[^a-z0-9_-]/', '', $_GET['id'] ?? '');
 if (!$id) { http_response_code(400); echo json_encode(['error' => 'Missing id']); exit; }
 
 // Map planner ID → config
+// place_id: get from Google Maps URL data param → !1s hex → ChIJ conversion
+// lat/lng: exact pin coordinates from Google Maps URL
 $planners = [
   'awhitehotwedding' => [
     'query'    => 'A White Hot Wedding',
-    'place_id' => null, // filled automatically on first run
-    'location' => '39.6135,2.5820', // Mallorca lat/lng
+    'place_id' => 'ChIJK86j35STrGM',   // derived from Maps URL CID
+    'lat'      => '39.613498',
+    'lng'      => '2.9116515',
   ],
 ];
 
@@ -28,34 +31,29 @@ if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 86400) {
   exit;
 }
 
-// Step 1: Find the Place ID
+// Step 1: Find the Place ID — try hardcoded first, then nearby search, then text search
 $place_id = $config['place_id'];
 
-if (!$place_id) {
-  // Try findplacefromtext (most precise for specific business names)
-  $find_url = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?'
+// Verify hardcoded place_id works, or find via nearby search
+if (!$place_id || strlen($place_id) < 20) {
+  // Nearby search at exact coordinates — most reliable
+  $nearby_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
     . http_build_query([
-        'input'     => $config['query'],
-        'inputtype' => 'textquery',
-        'fields'    => 'place_id,name',
-        'locationbias' => 'circle:50000@' . $config['location'],
-        'key'       => GOOGLE_API_KEY,
-        'language'  => 'en',
-      ]);
-
-  $find_resp = @file_get_contents($find_url);
-  $find_data = $find_resp ? json_decode($find_resp, true) : null;
-  $place_id  = $find_data['candidates'][0]['place_id'] ?? null;
-}
-
-if (!$place_id) {
-  // Fallback: text search
-  $search_url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?'
-    . http_build_query([
-        'query'    => $config['query'] . ' Mallorca Spain',
+        'location' => $config['lat'] . ',' . $config['lng'],
+        'radius'   => '100',
+        'keyword'  => $config['query'],
         'key'      => GOOGLE_API_KEY,
         'language' => 'en',
       ]);
+  $nearby_resp = @file_get_contents($nearby_url);
+  $nearby_data = $nearby_resp ? json_decode($nearby_resp, true) : null;
+  $place_id    = $nearby_data['results'][0]['place_id'] ?? null;
+}
+
+if (!$place_id) {
+  // Last resort: text search
+  $search_url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?'
+    . http_build_query(['query' => $config['query'] . ' Mallorca', 'key' => GOOGLE_API_KEY, 'language' => 'en']);
   $search_resp = @file_get_contents($search_url);
   $search_data = $search_resp ? json_decode($search_resp, true) : null;
   $place_id    = $search_data['results'][0]['place_id'] ?? null;
@@ -63,7 +61,7 @@ if (!$place_id) {
 
 if (!$place_id) {
   http_response_code(502);
-  echo json_encode(['error' => 'Place not found', 'debug' => $find_data ?? null]);
+  echo json_encode(['error' => 'Place not found', 'nearby_debug' => $nearby_data ?? null]);
   exit;
 }
 
