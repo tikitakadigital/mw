@@ -31,6 +31,15 @@ if ($zip->open($zip_path) !== true) {
     exit('ZIP open failed');
 }
 
+// Make all existing files writable BEFORE extracting so they can be overwritten
+$pre = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator(__DIR__, RecursiveDirectoryIterator::SKIP_DOTS),
+    RecursiveIteratorIterator::SELF_FIRST
+);
+foreach ($pre as $item) {
+    @chmod($item->getPathname(), $item->isDir() ? 0755 : 0644);
+}
+
 $zip->extractTo(__DIR__);
 $zip->close();
 
