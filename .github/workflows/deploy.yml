@@ -30,9 +30,11 @@ jobs:
         env:
           DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           sed -i "s/%%DEPLOY_SECRET%%/${DEPLOY_SECRET}/" out/_deploy.php
           find out/api -name "*.php" -exec sed -i "s/%%RESEND_API_KEY%%/${RESEND_API_KEY}/g" {} \;
+          find out/api -name "*.php" -exec sed -i "s/%%GOOGLE_API_KEY%%/${GOOGLE_API_KEY}/g" {} \;
 
       - name: Package and deploy via PHP webhook
         run: |

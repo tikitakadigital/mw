@@ -17,8 +17,10 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const liveReviews  = useLiveReviews(p.id, p.reviewsData ?? []);
-  const photos       = p.photos ?? [];
+  const { reviews: liveReviews, rating: liveRating, totalReviews: liveTotalReviews } = useLiveReviews(p.id, p.reviewsData ?? []);
+  const displayRating  = liveRating ?? p.rating;
+  const displayReviews = liveTotalReviews ?? p.reviews;
+  const photos         = p.photos ?? [];
   const specialisms  = p.specialisms ?? [];
   const services     = p.services ?? [];
   const process      = p.process ?? [];
@@ -69,8 +71,8 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           {/* Stats strip */}
           <div className="pp-stats">
             <div className="pp-stats__item">
-              <strong>{p.rating}<small> ★</small></strong>
-              <span>{p.reviews} reviews</span>
+              <strong>{displayRating}<small> ★</small></strong>
+              <span>{displayReviews} reviews</span>
             </div>
             <div className="pp-stats__item">
               <strong>{p.yearsActive}<small> yrs</small></strong>
@@ -246,7 +248,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           <div className="pp-section">
             <div className="pp-reviews-header">
               <h2>
-                <Icon name="star" size={20} /> {p.rating} · {p.reviews} reviews
+                <Icon name="star" size={20} /> {displayRating} · {displayReviews} reviews
               </h2>
               <a className="t-link" href="#" onClick={e => e.preventDefault()}>
                 See all <Icon name="arrow" size={12} />
