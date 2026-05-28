@@ -892,17 +892,17 @@ details[open] .faq-item__q::after { content: '−'; }
 .mw-profile__photos {
   display: grid; grid-template-columns: 2fr 1fr; gap: 8px;
   max-width: 1200px; margin: 0 auto; padding: 0 32px;
-  height: 480px;
+  height: 480px; overflow: hidden;
 }
 .mw-profile__hero {
   border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-  overflow: hidden; height: 100%; position: relative;
+  overflow: hidden; height: 480px; position: relative;
 }
 .mw-profile__sides {
-  display: grid; grid-template-rows: 1fr 1fr; gap: 8px; height: 100%;
+  display: grid; grid-template-rows: 1fr 1fr; gap: 8px; height: 480px;
 }
 .mw-profile__sides > div {
-  overflow: hidden; position: relative; height: 100%;
+  overflow: hidden; position: relative;
 }
 .mw-profile__sides > div:first-child { border-radius: 0 var(--radius-lg) 0 0; }
 .mw-profile__sides > div:last-child { border-radius: 0 0 var(--radius-lg) 0; }
