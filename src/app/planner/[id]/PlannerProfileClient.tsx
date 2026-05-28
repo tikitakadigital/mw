@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Icon from '@/components/Icon';
 import { VENUES, REAL_WEDDINGS } from '@/lib/data';
 import type { Planner, Venue } from '@/lib/types';
+import { useLiveReviews } from '@/lib/useLiveReviews';
 
 interface Props {
   planner: Planner;
@@ -16,11 +17,12 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
+  const liveReviews  = useLiveReviews(p.id, p.reviewsData ?? []);
   const photos       = p.photos ?? [];
   const specialisms  = p.specialisms ?? [];
   const services     = p.services ?? [];
   const process      = p.process ?? [];
-  const reviewsData  = p.reviewsData ?? [];
+  const reviewsData  = liveReviews;
   const faqs         = p.faqs ?? [];
   const signatureLine  = p.signatureLine ?? p.tagline;
   const weddingsPerYear = p.weddingsPerYear ?? `${p.reviews}+ weddings`;
