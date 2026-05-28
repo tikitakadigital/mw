@@ -75,11 +75,11 @@ jobs:
             -H "X-Deploy-Secret: ${{ secrets.DEPLOY_SECRET }}" \
             -H "X-Deploy-File: ${ZIP_FILE}" \
             --max-time 180 \
-            https://www.mallorcawedding.co.uk/_deploy.php)
+            https://mallorcawedding.co.uk/_deploy.php)
           echo "Deploy: $RESP"
 
           # Verify site is up
-          HTTP=$(curl -s -o /dev/null -w "%{http_code}" https://www.mallorcawedding.co.uk)
+          HTTP=$(curl -s -o /dev/null -w "%{http_code}" https://mallorcawedding.co.uk)
           echo "Site: $HTTP"
 
           # Purge Cloudflare cache (once Cloudflare is set up)
@@ -98,6 +98,6 @@ jobs:
             echo "Submitting $(echo $URLS | python3 -c 'import sys,json; print(len(json.load(sys.stdin)))') URLs to IndexNow"
             INDEXNOW=$(curl -sS -X POST "https://api.indexnow.org/indexnow" \
               -H "Content-Type: application/json; charset=utf-8" \
-              -d "{\"host\":\"www.mallorcawedding.co.uk\",\"key\":\"e3a7f9b2d4c6e1a8f0b3d5c7e9a2b4d6\",\"keyLocation\":\"https://www.mallorcawedding.co.uk/e3a7f9b2d4c6e1a8f0b3d5c7e9a2b4d6.txt\",\"urlList\":${URLS}}")
+              -d "{\"host\":\"mallorcawedding.co.uk\",\"key\":\"e3a7f9b2d4c6e1a8f0b3d5c7e9a2b4d6\",\"keyLocation\":\"https://mallorcawedding.co.uk/e3a7f9b2d4c6e1a8f0b3d5c7e9a2b4d6.txt\",\"urlList\":${URLS}}")
             echo "IndexNow: $INDEXNOW"
           fi
