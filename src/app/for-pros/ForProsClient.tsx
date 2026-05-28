@@ -39,7 +39,7 @@ export default function ForProsClient() {
         <span className="kicker kicker--brand">For wedding planners</span>
         <h1>Pre-qualified Mallorca wedding leads. No more €100k weddings on a €10k budget.</h1>
         <p className="lead">Couples spend 12 questions answering our Smart Matcher before you ever see them. You get the lead with budget, date, venue status, guest count, catering tier, florals level, photo/video, music, extras and guest logistics — and a complexity score recommending the planner tier.</p>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 32 }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 8 }}>
           <a className="btn btn--primary btn--xl" href="#apply" onClick={(e) => { e.preventDefault(); document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' }); }}>
             Apply to list — free trial
           </a>
