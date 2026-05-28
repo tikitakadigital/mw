@@ -28,16 +28,19 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
       </div>
 
       {/* Photo banner */}
-      <section className="mw-profile__photos">
-        <div className="mw-profile__hero">
-          <Image src={p.photos[0] || p.img} alt={p.firm} fill style={{ objectFit: 'cover' }} unoptimized />
+      <section style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 8, maxWidth: 1200, margin: '0 auto', padding: '0 32px' }}>
+        <div style={{ height: 480, overflow: 'hidden', borderRadius: '12px 0 0 12px' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={p.photos[0] || p.img} alt={p.firm} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-        <div className="mw-profile__sides">
-          <div>
-            <Image src={p.photos[1] || p.img} alt="" fill style={{ objectFit: 'cover' }} unoptimized />
+        <div style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: 8, height: 480 }}>
+          <div style={{ overflow: 'hidden', borderRadius: '0 12px 0 0' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={p.photos[1] || p.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
-          <div>
-            <Image src={p.photos[2] || p.img} alt="" fill style={{ objectFit: 'cover' }} unoptimized />
+          <div style={{ overflow: 'hidden', borderRadius: '0 0 12px 0' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={p.photos[2] || p.img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
         </div>
       </section>
