@@ -1,6 +1,6 @@
 <?php
 define('RESEND_API_KEY', '%%RESEND_API_KEY%%');
-define('ADMIN_EMAIL', 'hello@tikitaka.digital');
+define('ADMIN_EMAIL', 'hello@mallorcawedding.co.uk');
 define('FROM_EMAIL', 'Mallorca Wedding <noreply@mallorcawedding.co.uk>');
 
 header('Content-Type: application/json');
