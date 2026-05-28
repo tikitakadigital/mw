@@ -44,6 +44,10 @@ ErrorDocument 404 /404.html
   RewriteEngine On
   RewriteBase /
 
+  # Redirect www to non-www (canonical)
+  RewriteCond %{HTTP_HOST} ^www\.mallorcawedding\.co\.uk [NC]
+  RewriteRule ^(.*)$ https://mallorcawedding.co.uk/$1 [R=301,L]
+
   # Redirect /index.html → / and /path/index.html → /path/
   RewriteRule ^index\.html$ / [R=301,L]
   RewriteRule ^(.+)/index\.html$ /$1/ [R=301,L]
