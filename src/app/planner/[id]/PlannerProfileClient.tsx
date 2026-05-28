@@ -29,15 +29,15 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
 
       {/* Photo banner */}
       <section className="mw-profile__photos">
-        <div className="mw-profile__hero" style={{ overflow: 'hidden', borderRadius: '12px 0 0 12px' }}>
-          <Image src={p.photos[0] || p.img} alt={p.firm} width={800} height={560} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+        <div className="mw-profile__hero">
+          <Image src={p.photos[0] || p.img} alt={p.firm} fill style={{ objectFit: 'cover' }} unoptimized />
         </div>
         <div className="mw-profile__sides">
-          <div style={{ overflow: 'hidden', borderRadius: '0 12px 0 0' }}>
-            <Image src={p.photos[1] || p.img} alt="" width={400} height={276} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+          <div>
+            <Image src={p.photos[1] || p.img} alt="" fill style={{ objectFit: 'cover' }} unoptimized />
           </div>
-          <div style={{ overflow: 'hidden', borderRadius: '0 0 12px 0' }}>
-            <Image src={p.photos[2] || p.img} alt="" width={400} height={276} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+          <div>
+            <Image src={p.photos[2] || p.img} alt="" fill style={{ objectFit: 'cover' }} unoptimized />
           </div>
         </div>
       </section>
@@ -76,12 +76,18 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           <hr className="mw-profile__rule" />
           <h3>What&apos;s offered</h3>
           <ul className="mw-services">
-            {p.services.map((s, i) => (
-              <li key={i}>
-                <span className="mw-services__title">{s.title}</span>
-                <span className="mw-services__body">{s.body}</span>
-              </li>
-            ))}
+            {p.services.map((s, i) => {
+              const priceMatch = s.body.match(/From £[\d,]+/);
+              const price = priceMatch ? priceMatch[0] : '';
+              const bodyText = s.body.replace(/From £[\d,]+\.\s*/, '');
+              return (
+                <li key={i}>
+                  <span className="mw-services__title">{s.title}</span>
+                  {price && <span style={{ font: '600 14px/1 var(--font-body)', color: 'var(--ink)', whiteSpace: 'nowrap' }}>{price}</span>}
+                  <span className="mw-services__body">{bodyText}</span>
+                </li>
+              );
+            })}
           </ul>
 
           {preferredVenues.length > 0 && (
