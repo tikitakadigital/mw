@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 const PREVIEW_KEY = 'mw_preview_access';
-const PREVIEW_PASS = 'mallorca2026';
+const PREVIEW_PASS = 'Harvey16052014';
 
 export default function PreviewGate({ children }: { children: React.ReactNode }) {
   const [unlocked, setUnlocked] = useState<boolean | null>(null);
