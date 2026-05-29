@@ -13,6 +13,22 @@ interface Props {
   preferredVenues: Venue[];
 }
 
+// Generate a consistent pastel background + dark text colour from a name string
+function avatarColour(name: string): { bg: string; color: string } {
+  const palettes = [
+    { bg: '#dce8d4', color: '#2d4a24' }, // sage green
+    { bg: '#d4e4f0', color: '#1e3a52' }, // soft blue
+    { bg: '#f0dfd4', color: '#52301e' }, // terracotta
+    { bg: '#e8d4e8', color: '#4a1e52' }, // lavender
+    { bg: '#f0ecd4', color: '#524a1e' }, // warm sand
+    { bg: '#d4ece8', color: '#1e4a45' }, // teal
+    { bg: '#f0d4d4', color: '#521e1e' }, // blush rose
+    { bg: '#ddd4f0', color: '#2a1e52' }, // periwinkle
+  ];
+  const hash = name.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return palettes[hash % palettes.length];
+}
+
 export default function PlannerProfileClient({ planner: p, preferredVenues }: Props) {
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [lightbox, setLightbox] = useState<number | null>(null);
@@ -259,7 +275,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
                 {reviewsData.map((r, i) => (
                   <article key={i} className="pp-review">
                     <header>
-                      <span className="pp-review__avatar">{r.name[0]}</span>
+                      <span className="pp-review__avatar" style={{ background: avatarColour(r.name).bg, color: avatarColour(r.name).color }}>{r.name[0]}</span>
                       <div>
                         <strong>{r.name}</strong>
                         <span>

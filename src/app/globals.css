@@ -1698,10 +1698,10 @@ details[open] .faq-item__q::after { content: '−'; }
 .pp-review header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .pp-review__avatar {
   width: 40px; height: 40px; border-radius: 50%;
-  background: var(--surface-strong); color: var(--ink);
   display: inline-flex; align-items: center; justify-content: center;
   font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 18px;
   flex-shrink: 0;
+  /* background and color set dynamically per reviewer */
 }
 .pp-review header strong { display: block; font: var(--t-body-sm); font-weight: 600; color: var(--ink); }
 .pp-review header span { display: block; font: var(--t-caption); color: var(--muted); margin-top: 2px; }
