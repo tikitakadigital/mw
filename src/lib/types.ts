@@ -23,6 +23,9 @@ export interface PlannerReview {
   guests: number;
   venue: string;
   body: string;
+  stars?: number;
+  photo?: string;
+  source?: 'google' | 'manual';
 }
 
 export interface FAQ {

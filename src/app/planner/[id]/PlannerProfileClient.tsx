@@ -259,10 +259,25 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
                 {reviewsData.map((r, i) => (
                   <article key={i} className="pp-review">
                     <header>
-                      <span className="pp-review__avatar">{r.name[0]}</span>
+                      {r.photo ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={r.photo} alt={r.name} className="pp-review__avatar" style={{ objectFit: 'cover', borderRadius: '50%' }} />
+                      ) : (
+                        <span className="pp-review__avatar">{r.name[0]}</span>
+                      )}
                       <div>
                         <strong>{r.name}</strong>
-                        <span>{r.date} · {r.guests} guests · {r.venue}</span>
+                        <span>
+                          {r.stars && (
+                            <span style={{ color: '#f5a623', marginRight: 6 }}>
+                              {'★'.repeat(r.stars)}
+                            </span>
+                          )}
+                          {r.date}{r.guests > 0 ? ` · ${r.guests} guests` : ''}{r.venue ? ` · ${r.venue}` : ''}
+                          {r.source === 'google' && (
+                            <span style={{ marginLeft: 6, font: 'var(--t-micro)', color: 'var(--muted)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Google</span>
+                          )}
+                        </span>
                       </div>
                     </header>
                     <p>&ldquo;{r.body}&rdquo;</p>
