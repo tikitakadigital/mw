@@ -57,6 +57,7 @@ export default function Icon({ name, size = 20, stroke = 1.6, className = '' }: 
     case 'inbox':     return <svg {...props}><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>;
     case 'overview':  return <svg {...props}><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>;
     case 'profile':   return <svg {...props}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>;
+    case 'info':      return <svg {...props}><circle cx="12" cy="12" r="9"/><circle cx="12" cy="8" r="0.5" fill="currentColor" stroke="none"/><line x1="12" y1="11" x2="12" y2="16"/></svg>;
     default: return null;
   }
 }

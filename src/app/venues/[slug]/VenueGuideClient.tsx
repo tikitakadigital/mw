@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Icon from '@/components/Icon';
@@ -21,62 +20,48 @@ interface Props {
 
 export default function VenueGuideClient({ venue: v, matchedPlanners, alternatives }: Props) {
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const totalRef    = useRef<HTMLTableCellElement>(null);
-  const snapshotRef = useRef<HTMLDivElement>(null);
-  const railEstRef  = useRef<HTMLParagraphElement>(null);
-  const examplesRef = useRef<HTMLDivElement>(null);
-  const photos      = v.photos.length > 0 ? v.photos : [v.img];
-  const sara        = PLANNERS.find(p => p.id === 'sara');
-
-  // Count-up helper
-  function countUp(el: HTMLElement, low: number, high: number, suffix = '') {
-    gsap.fromTo({ val: low }, { val: high }, {
-      duration: 1.2, ease: 'power2.out',
-      onUpdate: function() {
-        const t = (this as unknown as { targets: () => [{ val: number }] }).targets()[0];
-        el.textContent = `€${Math.round(t.val).toLocaleString()}${suffix}`;
-      },
-    });
-  }
+  const totalRef   = useRef<HTMLTableCellElement>(null);
+  const railEstRef = useRef<HTMLParagraphElement>(null);
+  const photos     = v.photos.length > 0 ? v.photos : [v.img];
+  const sara       = PLANNERS.find(p => p.id === 'sara');
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Snapshot rows
-      if (snapshotRef.current) {
-        gsap.fromTo(Array.from(snapshotRef.current.children),
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out',
-            scrollTrigger: { trigger: snapshotRef.current, start: 'top 87%', once: true } }
-        );
-      }
-      // Cost total count-up
+      // Count-up for breakdown total
       if (totalRef.current) {
         ScrollTrigger.create({
           trigger: totalRef.current, start: 'top 85%', once: true,
           onEnter: () => {
-            if (totalRef.current) countUp(totalRef.current, v.estTotal80.low * 0.5, v.estTotal80.high, v.id === 'son-marroig' ? '+' : '');
+            if (!totalRef.current) return;
+            const target = v.estTotal80.high;
+            gsap.fromTo({ val: v.estTotal80.low }, { val: target }, {
+              duration: 1.2, ease: 'power2.out',
+              onUpdate: function() {
+                if (totalRef.current) {
+                  const t = (this as unknown as { targets: () => [{ val: number }] }).targets()[0];
+                  totalRef.current.textContent = `€${Math.round(t.val).toLocaleString()}${v.id === 'son-marroig' ? '+' : ''}`;
+                }
+              },
+            });
           },
         });
       }
-      // Rail estimate count-up
-      if (railEstRef.current) {
-        ScrollTrigger.create({
-          trigger: railEstRef.current, start: 'top 85%', once: true,
-          onEnter: () => {
-            if (railEstRef.current) {
-              railEstRef.current.textContent = `€${(v.estTotal80.low / 1000).toFixed(0)}k – €${(v.estTotal80.high / 1000).toFixed(0)}k${v.id === 'son-marroig' ? '+' : ''}`;
-            }
-          },
-        });
-      }
-      // Example budgets
-      if (examplesRef.current) {
-        gsap.fromTo(Array.from(examplesRef.current.children),
+      // Block scroll reveals — each section fades up as a unit
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(el => {
+        gsap.fromTo(el,
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.55, stagger: 0.1, ease: 'power3.out',
-            scrollTrigger: { trigger: examplesRef.current, start: 'top 85%', once: true } }
+          { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
         );
-      }
+      });
+      // Staggered card children
+      document.querySelectorAll<HTMLElement>('[data-stagger]').forEach(el => {
+        gsap.fromTo(Array.from(el.children),
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
+        );
+      });
     });
     return () => ctx.revert();
   }, [v.id, v.estTotal80.low, v.estTotal80.high]);
@@ -115,27 +100,26 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
           </div>
         )}
 
-        {/* Gallery — explicit heights to prevent fill-image overflow */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 8, height: 480, borderRadius: 20, overflow: 'hidden', position: 'relative' }}>
-          <button type="button" style={{ border: 'none', padding: 0, cursor: 'pointer', overflow: 'hidden', height: 480 }}
-            onClick={() => setLightbox(0)} aria-label="Open photos">
+        {/* Gallery — CSS classes with plain img tags (aspect-ratio driven) */}
+        <div className="venue-gallery">
+          <button type="button" className="venue-gallery__main" onClick={() => setLightbox(0)} aria-label="Open photos">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photos[0]} alt={`${v.name} wedding venue`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            <img src={photos[0]} alt={`${v.name} wedding venue, ${v.region}, Mallorca`} />
           </button>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 8, height: 480 }}>
+          <div className="venue-gallery__grid">
             {[1, 2, 3, 4].map(i => (
-              <button key={i} type="button"
-                style={{ border: 'none', padding: 0, cursor: 'pointer', overflow: 'hidden', height: '100%', width: '100%', visibility: photos[i] ? 'visible' : 'hidden' }}
+              <button key={i} type="button" className="venue-gallery__cell"
+                style={{ visibility: photos[i] ? 'visible' : 'hidden' }}
                 onClick={() => setLightbox(i)} aria-label={`Photo ${i + 1}`}>
                 {photos[i] && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={photos[i]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <img src={photos[i]} alt="" />
                 )}
               </button>
             ))}
           </div>
           {photos.length > 5 && (
-            <button type="button" className="venue-gallery__more" onClick={() => setLightbox(0)} style={{ position: 'absolute', bottom: 16, right: 16 }}>
+            <button type="button" className="venue-gallery__more" onClick={() => setLightbox(0)}>
               <Icon name="camera" size={14} /> Show all {photos.length} photos
             </button>
           )}
@@ -149,13 +133,37 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
           <div className="venue-body">
 
             <span className="kicker">{v.region} · {v.usp}</span>
-            <h2>About {v.name}</h2>
+            <h2 style={{ marginTop: 12 }}>About {v.name}</h2>
             <p className="lead">{v.blurb}</p>
+
+            {/* Key facts strip */}
+            <div className="venue-facts" data-stagger>
+              <div className="venue-fact">
+                <Icon name="guests" size={18} />
+                <span className="venue-fact__v">{v.capacity}</span>
+                <span className="venue-fact__l">Capacity</span>
+              </div>
+              <div className="venue-fact">
+                <Icon name="wallet" size={18} />
+                <span className="venue-fact__v">{v.cateringTier}</span>
+                <span className="venue-fact__l">Catering tier</span>
+              </div>
+              <div className="venue-fact">
+                <Icon name="sun" size={18} />
+                <span className="venue-fact__v">{v.season}</span>
+                <span className="venue-fact__l">Best season</span>
+              </div>
+              <div className="venue-fact">
+                <Icon name={v.plannerRequired ? 'shield' : 'check'} size={18} />
+                <span className="venue-fact__v">{v.plannerRequired ? 'Required' : 'Recommended'}</span>
+                <span className="venue-fact__l">Wedding planner</span>
+              </div>
+            </div>
 
             {/* Snapshot */}
             <h2>Quick {v.name} wedding cost snapshot</h2>
             <p>Typical realistic budgets for weddings in 2026:</p>
-            <div className="snapshot" ref={snapshotRef}>
+            <div className="snapshot" data-stagger>
               {v.costSnapshot.map((s, i) => (
                 <div key={i} className={`snapshot__row ${s.highlight ? 'is-on' : ''}`}>
                   <span className="snapshot__guests">{s.g}</span>
@@ -167,35 +175,36 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
               These estimates reflect the wedding day itself. Multi-day celebrations can increase the total significantly.
             </p>
 
-            {/* Inline matcher CTA */}
-            <div style={{ margin: '32px 0', padding: 24, background: 'var(--primary-soft)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+            {/* Inline CTA band */}
+            <div className="venue-cta-band" data-reveal>
               <div>
-                <strong style={{ font: 'var(--t-body-md)', fontWeight: 700, color: 'var(--ink)', display: 'block' }}>Calculate your {v.name} budget in 30 seconds</strong>
-                <span style={{ font: 'var(--t-body-sm)', color: 'var(--body)' }}>Use the Smart Matcher to get a realistic estimate based on guest count, season and complexity.</span>
+                <strong>Calculate your {v.name} budget in 30 seconds</strong>
+                <span>Use the Smart Matcher to get a realistic estimate based on guest count, season and complexity.</span>
               </div>
               <Link href="/matcher" className="btn btn--primary">
                 <Icon name="sparkle" size={14} /> Calculate my budget
               </Link>
             </div>
 
-            {/* Cost explanation */}
+            {/* Cost explanation — lead panel */}
             <h2>How much does a wedding at {v.name} cost?</h2>
-            {v.blankCanvas ? (
-              <>
-                <p>The average {v.name} wedding cost is influenced primarily by guest numbers, catering level and production requirements. Because the venue is a blank-canvas event space, infrastructure must be installed temporarily for each wedding.</p>
-                <p>Typical cost drivers include lighting installations, generator power systems, temporary catering kitchens, event furniture rentals and supplier logistics.</p>
-                <p>These requirements are the main reason {v.name} weddings tend to cost more than celebrations hosted at private finca venues elsewhere on the island.</p>
-              </>
-            ) : (
-              <>
-                <p>The cost is primarily influenced by guest numbers, catering level, décor installations and entertainment.</p>
-                <p>Because the venue is {v.region.includes('Palma') ? 'close to Palma' : 'in the ' + v.region.split('·')[0].trim()}, supplier access is {v.region.includes('Palma') ? 'relatively straightforward compared with remote venues' : 'a planning factor — lighting and transport are usually budgeted accordingly'}.</p>
-              </>
-            )}
+            <div className="venue-lead-panel" data-reveal>
+              {v.blankCanvas ? (
+                <>
+                  <p>The average {v.name} wedding cost is influenced primarily by guest numbers, catering level and production requirements. Because the venue is a blank-canvas event space, infrastructure must be installed temporarily for each wedding.</p>
+                  <p>Typical cost drivers include lighting installations, generator power systems, temporary catering kitchens, event furniture rentals and supplier logistics — the main reason {v.name} weddings tend to cost more than private finca venues.</p>
+                </>
+              ) : (
+                <>
+                  <p>The cost is primarily influenced by guest numbers, catering level, décor installations and entertainment.</p>
+                  <p>{v.id === 'finca-comassema' ? "Comassema's large outdoor spaces and established event areas make it suitable for larger weddings and elaborate designs." : v.id === 'finca-son-mir' ? "Its proximity to Palma keeps supplier and transport logistics simple, which often makes Son Mir slightly more cost-efficient than headline cliffside venues." : v.id === 'son-togores' ? "Unlike more complex venues, Son Togores offers easier access for suppliers and production teams, reducing infrastructure costs." : "The venue's character and infrastructure are reflected in the totals below."}</p>
+                </>
+              )}
+            </div>
 
             {/* Breakdown table */}
             <h2>{v.name} wedding cost breakdown</h2>
-            <table className="venue-cost-table">
+            <table className="venue-cost-table" data-reveal>
               <thead>
                 <tr><th>Item</th><th style={{ textAlign: 'right' }}>2026 estimate</th></tr>
               </thead>
@@ -217,7 +226,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
             {v.exampleBudgets.length > 0 && (
               <>
                 <h2>Example {v.name} wedding budgets</h2>
-                <div className="venue-examples" ref={examplesRef}>
+                <div className="venue-examples" data-stagger>
                   {v.exampleBudgets.map((ex, i) => (
                     <div key={i} className="venue-example">
                       <span className="venue-example__h">{ex.h}</span>
@@ -229,51 +238,68 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
               </>
             )}
 
-            {/* Why expensive */}
+            {/* Why expensive — numbered cards */}
             {v.whyExpensive && (
               <>
                 <h2>Why {v.name} weddings are more expensive</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, margin: '16px 0 32px' }}>
+                <div className="venue-why" data-stagger>
                   {v.whyExpensive.map((w, i) => (
-                    <div key={i}>
-                      <h3 className="serif-h3" style={{ marginBottom: 8 }}>{w.h}</h3>
-                      <p style={{ font: 'var(--t-body-md)', color: 'var(--body)' }}>{w.p}</p>
+                    <div key={i} className="venue-why__card">
+                      <span className="venue-why__num">{String(i + 1).padStart(2, '0')}</span>
+                      <h3 className="serif-h3">{w.h}</h3>
+                      <p>{w.p}</p>
                     </div>
                   ))}
                 </div>
               </>
             )}
 
+            {/* What makes it special — green check cards */}
             <h2>What makes {v.name} special</h2>
-            <div className="venue-pros-grid">
+            <div className="venue-cardgrid" data-stagger>
               {v.pros.map((pro, i) => (
-                <div key={i} className="venue-pros-item">
-                  <span className="venue-pros-item__ico"><Icon name="check" size={15} stroke={2.2} /></span>
+                <div key={i} className="venue-pcard venue-pcard--good">
+                  <span className="venue-pcard__ico"><Icon name="check" size={16} stroke={2.2} /></span>
                   <p>{pro}</p>
                 </div>
               ))}
             </div>
 
+            {/* Things to know — info icon cards */}
             <h2>Things to know before booking</h2>
-            <div className="venue-know-list">
+            <div className="venue-cardgrid" data-stagger>
               {v.things_to_know.map((t, i) => (
-                <div key={i} className="venue-know-item">
-                  <span className="venue-know-item__num">{String(i + 1).padStart(2, '0')}</span>
+                <div key={i} className="venue-pcard venue-pcard--note">
+                  <span className="venue-pcard__ico"><Icon name="info" size={16} stroke={2} /></span>
                   <p>{t}</p>
                 </div>
               ))}
             </div>
 
-            {/* Included vs Not included */}
+            {/* Included vs Not included — clean two columns */}
             <h2>What&apos;s included vs not included</h2>
-            <IncludedSection includes={v.includes} notIncluded={v.notIncluded} />
+            <div className="venue-incl" data-stagger>
+              <div className="venue-incl__col venue-incl__col--yes">
+                <h3><Icon name="check" size={16} stroke={2.2} /> Included</h3>
+                <ul>
+                  {v.includes.map((it, i) => <li key={i}>{it}</li>)}
+                </ul>
+              </div>
+              <div className="venue-incl__col venue-incl__col--no">
+                <h3><Icon name="close" size={16} stroke={2.2} /> Not included</h3>
+                <ul>
+                  {v.notIncluded.map((it, i) => <li key={i}>{it}</li>)}
+                </ul>
+              </div>
+            </div>
 
             {/* Inline photo band */}
             {photos.length > 5 && (
               <div className="venue-inline-photos">
                 {photos.slice(5, 8).map((src, i) => (
                   <button key={i} type="button" onClick={() => setLightbox(5 + i)}>
-                    <Image src={src} alt="" fill style={{ objectFit: 'cover' }} unoptimized />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt="" />
                   </button>
                 ))}
               </div>
@@ -282,7 +308,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
             {/* Matched planners */}
             <h2>Wedding planners who regularly work at {v.name}</h2>
             <p>These planners have a track record at {v.name}. They know the venue team, the access rules, and the production patterns that keep totals in range.</p>
-            <div className="pcard-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 24 }}>
+            <div className="pcard-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 24 }} data-stagger>
               {matchedPlanners.map(p => <PlannerCard key={p.id} planner={p} />)}
             </div>
 
@@ -291,11 +317,12 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
               <>
                 <h2>Alternative Mallorca wedding venues</h2>
                 <p>If the {v.name} estimate exceeds your budget, these venues offer comparable atmosphere at a lower total. <Link href="/venues" className="t-link t-link--brand">See all venue cost guides</Link>.</p>
-                <div className="cost-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 24 }}>
+                <div className="cost-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 24 }} data-stagger>
                   {alternatives.map(alt => (
                     <Link key={alt.id} href={`/venues/${alt.slug}`} className="cost-card">
                       <div className="cost-card__photo">
-                        <Image src={alt.img} alt={alt.name} fill style={{ objectFit: 'cover' }} unoptimized />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={alt.img} alt={alt.name} />
                       </div>
                       <div className="cost-card__body">
                         <h4 className="cost-card__name">{alt.name}</h4>
@@ -313,7 +340,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
             <div className="faq">
               {[
                 { q: `What is the minimum budget for a ${v.name} wedding?`, a: `Most weddings start around €${v.estTotal80.low.toLocaleString()}, with peak-season weddings often exceeding €${v.estTotal80.high.toLocaleString()}${v.id === 'son-marroig' ? '+' : ''}.` },
-                { q: 'Does the estimate include wedding planner fees?', a: "No. Wedding planners typically charge €6,000–€15,000+ depending on service level. We'd recommend a planner for any wedding at this venue." },
+                { q: 'Does the estimate include wedding planner fees?', a: "No. Wedding planners typically charge €6,000–€15,000+ depending on service level." },
                 { q: 'Does the estimate include additional wedding events?', a: 'No. These estimates reflect the wedding day only. Welcome dinners and brunches can add €15–40k depending on scale.' },
                 { q: 'How far in advance should we book?', a: 'Peak Saturdays often book 12–18 months ahead. Shoulder-season and weekday dates have more availability at 8–10 months out.' },
               ].map((f, i) => (
@@ -377,68 +404,10 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
         </div>
       </section>
 
-      {/* Lightbox */}
       {lightbox !== null && (
         <Lightbox photos={photos} index={lightbox} onClose={() => setLightbox(null)} setIndex={setLightbox} />
       )}
     </>
-  );
-}
-
-function IncludedSection({ includes, notIncluded }: { includes: string[]; notIncluded: string[] }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo(Array.from(ref.current!.children),
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.55, stagger: 0.06, ease: 'power3.out',
-          scrollTrigger: { trigger: ref.current, start: 'top 85%', once: true } }
-      );
-    }, ref);
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <div className="venue-incl-grid" ref={ref}>
-      {/* Included */}
-      <div className="venue-incl-card venue-incl-card--yes">
-        <div className="venue-incl-card__head">
-          <span className="venue-incl-card__icon venue-incl-card__icon--yes">
-            <Icon name="check" size={16} stroke={2.2} />
-          </span>
-          <h3>Included</h3>
-        </div>
-        <ul>
-          {includes.map((it, i) => (
-            <li key={i}>
-              <Icon name="check" size={14} stroke={2} />
-              <span>{it}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Not included */}
-      <div className="venue-incl-card venue-incl-card--no">
-        <div className="venue-incl-card__head">
-          <span className="venue-incl-card__icon venue-incl-card__icon--no">
-            <Icon name="close" size={14} stroke={2.2} />
-          </span>
-          <h3>Not included</h3>
-        </div>
-        <ul>
-          {notIncluded.map((it, i) => (
-            <li key={i}>
-              <span className="venue-incl-dash">+</span>
-              <span>{it}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="venue-incl-note">These are typically handled separately and can add €15–50k+ to the total.</p>
-      </div>
-    </div>
   );
 }
 

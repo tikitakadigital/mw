@@ -1087,96 +1087,131 @@ details[open] .faq-item__q::after { content: '−'; }
   max-width: 1200px; margin: 0 auto; padding: 0 32px;
   align-items: start;
 }
+/* ─── Venue body — v2 redesign ─── */
 .venue-body { display: flex; flex-direction: column; }
-.venue-body h2 { font-size: clamp(22px, 2.5vw, 30px); margin: 40px 0 14px; color: var(--ink); }
-.venue-body h2:first-of-type { margin-top: 0; }
-.venue-body p { font: var(--t-body-md); color: var(--body); margin-bottom: 12px; line-height: 1.75; }
-.venue-body ul { list-style: none; padding: 0; margin-bottom: 20px; }
-.venue-body > ul > li {
-  padding: 12px 0 12px 28px; position: relative;
+.venue-body h2 {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(24px, 2.8vw, 32px); line-height: 1.1;
+  color: var(--ink); margin: 56px 0 18px;
+  padding-top: 20px; border-top: 1px solid var(--hairline);
+}
+.venue-body h2:first-child { margin-top: 12px; padding-top: 0; border-top: none; }
+.venue-body > p { font: var(--t-body-lg); color: var(--body); margin: 0 0 16px; line-height: 1.65; max-width: 64ch; }
+.venue-body p.lead { font-size: 20px; color: var(--ink); }
+
+/* Key facts strip */
+.venue-facts {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: var(--hairline); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md); overflow: hidden; margin: 24px 0 8px;
+}
+.venue-fact {
+  background: var(--surface); padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.venue-fact svg { color: var(--primary); margin-bottom: 4px; }
+.venue-fact__v { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 20px; color: var(--ink); line-height: 1.1; }
+.venue-fact__l { font: var(--t-caption); color: var(--muted); }
+
+/* Lead panel — coral left border */
+.venue-lead-panel {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 22px 26px; margin: 8px 0 16px;
+}
+.venue-lead-panel p { font: var(--t-body-lg); color: var(--body); margin: 0 0 12px; line-height: 1.6; max-width: none; }
+.venue-lead-panel p:last-child { margin-bottom: 0; }
+
+/* CTA band */
+.venue-cta-band {
+  margin: 8px 0; padding: 22px 26px;
+  background: var(--primary-soft); border: 1px solid rgba(107,122,58,0.2);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.venue-cta-band strong { font: var(--t-body-lg); font-weight: 700; color: var(--ink); display: block; }
+.venue-cta-band span { font: var(--t-body-sm); color: var(--body); }
+
+/* Card grids — pros / things to know */
+.venue-cardgrid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0 8px;
+}
+.venue-pcard {
+  display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md); padding: 16px 18px;
+}
+.venue-pcard p { font: var(--t-body-md); color: var(--body); margin: 0; line-height: 1.5; }
+.venue-pcard__ico {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.venue-pcard--good .venue-pcard__ico { background: rgba(90,122,68,0.12); color: var(--success); }
+.venue-pcard--note .venue-pcard__ico { background: var(--primary-soft); color: var(--primary); }
+
+/* Why expensive — numbered cards */
+.venue-why { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0 8px; }
+.venue-why__card {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md); padding: 22px 24px;
+}
+.venue-why__num {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: 28px; color: var(--primary); line-height: 1; display: block; margin-bottom: 10px;
+}
+.venue-why__card h3 { font-size: 19px; margin: 0 0 6px; }
+.venue-why__card p { font: var(--t-body-md); color: var(--body); margin: 0; line-height: 1.5; }
+
+/* Included vs not-included — clean two columns */
+.venue-incl { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0 8px; }
+.venue-incl__col {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md); padding: 20px 22px;
+}
+.venue-incl__col h3 {
+  display: flex; align-items: center; gap: 8px;
+  font: 700 13px/1 var(--font-body);
+  letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 14px;
+}
+.venue-incl__col--yes h3 { color: var(--success); }
+.venue-incl__col--no  h3 { color: var(--muted); }
+.venue-incl__col ul { list-style: none; padding: 0; margin: 0; }
+.venue-incl__col li {
+  padding: 9px 0; border-bottom: 1px solid var(--hairline-soft);
+  font: var(--t-body-md); color: var(--body);
+}
+.venue-incl__col li:last-child { border-bottom: none; }
+.venue-incl__col--no li { color: var(--muted); }
+
+/* Cost table — elevated */
+.venue-cost-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0 12px;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md); overflow: hidden;
+}
+.venue-cost-table th, .venue-cost-table td {
+  text-align: left; padding: 14px 18px;
   border-bottom: 1px solid var(--hairline-soft);
   font: var(--t-body-md); color: var(--body);
 }
-.venue-body > ul > li::before {
-  content: ''; position: absolute; left: 0; top: 20px;
-  width: 14px; height: 1.5px; background: var(--primary);
+.venue-cost-table th {
+  font-weight: 700; color: var(--muted); letter-spacing: 0.06em;
+  text-transform: uppercase; font-size: 11px; background: var(--canvas);
+}
+.venue-cost-table tr:last-child td { border-bottom: none; }
+.venue-cost-table td.total { font-weight: 600; color: var(--ink); background: var(--primary-soft); }
+.venue-cost-table td.total:last-child {
+  font-family: var(--font-display); font-style: italic; font-size: 22px;
+  color: var(--primary-active);
 }
 
-/* Pros grid */
-.venue-pros-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 4px 0 32px;
-}
-.venue-pros-item {
-  display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start;
-  padding: 18px 20px;
-  background: var(--surface); border: 1px solid var(--hairline);
-  border-radius: var(--radius-md);
-}
-.venue-pros-item__ico {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--primary-soft); color: var(--primary);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; margin-top: 1px;
-}
-.venue-pros-item p { font: var(--t-body-sm); color: var(--body); margin: 0; }
-
-/* Things to know */
-.venue-know-list { display: flex; flex-direction: column; gap: 0; margin: 4px 0 32px; }
-.venue-know-item {
-  display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start;
-  padding: 18px 0; border-bottom: 1px solid var(--hairline-soft);
-}
-.venue-know-item:first-child { border-top: 1px solid var(--hairline-soft); }
-.venue-know-item__num {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-size: 28px; color: var(--primary); line-height: 1.1;
-}
-.venue-know-item p { font: var(--t-body-md); color: var(--body); margin: 0; padding-top: 4px; }
-
-/* Included vs Not included */
-.venue-incl-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-  margin: 16px 0 40px;
-}
-.venue-incl-card {
-  border-radius: var(--radius-lg); padding: 28px;
-  display: flex; flex-direction: column; gap: 16px;
-}
-.venue-incl-card--yes { background: #f0f4eb; border: 1px solid #d4d8c0; }
-.venue-incl-card--no  { background: var(--surface); border: 1px solid var(--hairline); }
-.venue-incl-card__head {
-  display: flex; align-items: center; gap: 12px;
-}
-.venue-incl-card__head h3 {
-  font: 600 16px/1 var(--font-body); color: var(--ink); margin: 0;
-}
-.venue-incl-card__icon {
-  width: 32px; height: 32px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.venue-incl-card__icon--yes { background: var(--primary); color: #fff; }
-.venue-incl-card__icon--no  { background: var(--surface-strong); color: var(--muted); }
-.venue-incl-card ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
-.venue-incl-card li {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
-  font: var(--t-body-sm); color: var(--body);
-}
-.venue-incl-card li:last-child { border-bottom: none; }
-.venue-incl-card--yes li svg { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
-.venue-incl-dash {
-  font: 600 16px/1.2 var(--font-body); color: var(--primary);
-  flex-shrink: 0; margin-top: 1px;
-}
-.venue-incl-note {
-  font: var(--t-caption); color: var(--muted); margin: 0;
-  padding-top: 12px; border-top: 1px solid var(--hairline-soft);
-}
-
-@media (max-width: 600px) {
-  .venue-pros-grid { grid-template-columns: 1fr; }
-  .venue-incl-grid { grid-template-columns: 1fr; }
+@media (max-width: 700px) {
+  .venue-facts { grid-template-columns: 1fr 1fr; }
+  .venue-cardgrid { grid-template-columns: 1fr; }
+  .venue-why { grid-template-columns: 1fr; }
+  .venue-incl { grid-template-columns: 1fr; }
 }
 
 .snapshot { border: 1px solid var(--hairline); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 8px; }
