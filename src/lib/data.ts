@@ -2,7 +2,7 @@ import type { Planner, Venue, BlogPost, ArticleBlock, RealWedding, EditorialMemb
 
 export const PLANNERS: Planner[] = [
   {
-    id: 'sara', name: 'Sara Llabrés', firm: 'Slow Finca',
+    verified: true, id: 'sara', name: 'Sara Llabrés', firm: 'Slow Finca',
     location: 'Pollença', style: 'Finca · slow',
     types: ['finca', 'intimate'],
     guests: '20–60', minGuests: 20, maxGuests: 60,
@@ -61,7 +61,7 @@ export const PLANNERS: Planner[] = [
     preferredVenues: ['son-marroig', 'finca-comassema', 'son-togores'], yearsActive: 9,
   },
   {
-    id: 'marc', name: 'Marc Vives', firm: 'Tramuntana Days',
+    verified: true, id: 'marc', name: 'Marc Vives', firm: 'Tramuntana Days',
     location: 'Sóller', style: 'Mountain · valley',
     types: ['finca', 'luxury', 'multi-day'],
     guests: '40–120', minGuests: 40, maxGuests: 120,
@@ -110,7 +110,7 @@ export const PLANNERS: Planner[] = [
     preferredVenues: ['finca-comassema', 'finca-son-berga'], yearsActive: 12,
   },
   {
-    id: 'lina', name: 'Lina Schäfer', firm: 'Costa Brava Atelier',
+    verified: true, id: 'lina', name: 'Lina Schäfer', firm: 'Costa Brava Atelier',
     location: 'Cap de Formentor', style: 'Coastal · sunset',
     types: ['beach', 'luxury'],
     guests: '30–90', minGuests: 30, maxGuests: 90,
@@ -153,7 +153,7 @@ export const PLANNERS: Planner[] = [
     preferredVenues: ['son-marroig', 'son-togores'], yearsActive: 7,
   },
   {
-    id: 'rocio', name: 'Rocío Ferrer', firm: 'Palma Studio',
+    verified: true, id: 'rocio', name: 'Rocío Ferrer', firm: 'Palma Studio',
     location: 'Palma', style: 'Urban · courtyard',
     types: ['intimate', 'villa'],
     guests: '20–80', minGuests: 20, maxGuests: 80,
@@ -194,7 +194,7 @@ export const PLANNERS: Planner[] = [
     preferredVenues: ['finca-son-mir'], yearsActive: 11,
   },
   {
-    id: 'pau', name: 'Pau & Aina Roca', firm: 'Olive Grove Co.',
+    verified: true, id: 'pau', name: 'Pau & Aina Roca', firm: 'Olive Grove Co.',
     location: 'Santanyí', style: 'Finca · long-table',
     types: ['finca', 'lgbtq', 'multi-day'],
     guests: '30–100', minGuests: 30, maxGuests: 100,
@@ -237,7 +237,7 @@ export const PLANNERS: Planner[] = [
     preferredVenues: ['finca-son-berga', 'finca-comassema'], yearsActive: 8,
   },
   {
-    id: 'elena', name: 'Elena Mateu', firm: 'Citrus & Salt',
+    verified: true, id: 'elena', name: 'Elena Mateu', firm: 'Citrus & Salt',
     location: 'Valldemossa', style: 'Florist & styling',
     types: ['florist', 'intimate'],
     guests: '10–200', minGuests: 10, maxGuests: 200,
@@ -280,7 +280,7 @@ export const PLANNERS: Planner[] = [
     preferredVenues: ['son-marroig', 'son-togores', 'finca-comassema'], yearsActive: 6,
   },
   {
-    id: 'awhitehotwedding',
+    verified: true, id: 'awhitehotwedding',
     name: 'Olivia Skeen & Lucy',
     firm: 'A White Hot Wedding',
     location: 'Port Adriano',

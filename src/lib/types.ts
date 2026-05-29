@@ -34,6 +34,7 @@ export interface FAQ {
 }
 
 export interface Planner {
+  verified: boolean;   // true = vetted by admin, appears in matcher + full profile
   id: string;
   name: string;
   firm: string;

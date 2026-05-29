@@ -7,6 +7,8 @@ import Icon from '@/components/Icon';
 import { VENUES, REAL_WEDDINGS } from '@/lib/data';
 import type { Planner, Venue } from '@/lib/types';
 import { useLiveReviews } from '@/lib/useLiveReviews';
+import { usePlannerStatus } from '@/lib/usePlannerStatus';
+import ClaimBanner from '@/components/ClaimBanner';
 
 interface Props {
   planner: Planner;
@@ -34,6 +36,8 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   const { reviews: liveReviews } = useLiveReviews(p.id, p.reviewsData ?? []);
+  const { status, claimEmail } = usePlannerStatus(p.id, p.verified);
+  const isVerified = status === 'verified';
   const displayRating  = p.rating;
   const displayReviews = p.reviews;
   const photos         = p.photos ?? [];
@@ -54,6 +58,9 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
 
   return (
     <main>
+      {/* Claim banner — shows for unclaimed/pending profiles */}
+      <ClaimBanner plannerId={p.id} plannerName={p.name} status={status} claimEmail={claimEmail} />
+
       {/* Topline */}
       <div className="pp-topline">
         <Link href="/planners" className="pp-back">
@@ -355,17 +362,30 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
               <span>From <strong>{p.price.split('–')[0]}</strong></span>
               <span className="pp-book__per">Full planning · flat fee</span>
             </div>
-            <button
-              className="btn btn--primary"
-              style={{ width: '100%', marginBottom: 8 }}
-              onClick={() => setShowEnquiry(true)}
-              type="button"
-            >
-              Request a call with {firstName}
-            </button>
-            <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', textAlign: 'center', margin: '0 0 16px' }}>
-              Free · No obligation · {firstName} replies in ~{avgResponse}
-            </p>
+            {isVerified ? (
+              <>
+                <button
+                  className="btn btn--primary"
+                  style={{ width: '100%', marginBottom: 8 }}
+                  onClick={() => setShowEnquiry(true)}
+                  type="button"
+                >
+                  Request a call with {firstName}
+                </button>
+                <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', textAlign: 'center', margin: '0 0 16px' }}>
+                  Free · No obligation · {firstName} replies in ~{avgResponse}
+                </p>
+              </>
+            ) : (
+              <>
+                <Link href={`/claim/${p.id}`} className="btn btn--primary" style={{ width: '100%', marginBottom: 8, justifyContent: 'center' }}>
+                  Claim this profile
+                </Link>
+                <p style={{ font: 'var(--t-caption)', color: 'var(--muted)', textAlign: 'center', margin: '0 0 16px' }}>
+                  {status === 'pending' ? 'Verification in review — enquiries available once verified' : 'This planner hasn\'t verified their profile yet'}
+                </p>
+              </>
+            )}
             <hr className="pp-book__rule" />
             <dl className="pp-book__meta">
               <dt>Availability</dt><dd>{nextAvailable}</dd>
