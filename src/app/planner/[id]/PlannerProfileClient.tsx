@@ -17,9 +17,9 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const { reviews: liveReviews, rating: liveRating, totalReviews: liveTotalReviews } = useLiveReviews(p.id, p.reviewsData ?? []);
-  const displayRating  = liveRating ?? p.rating;
-  const displayReviews = liveTotalReviews ?? p.reviews;
+  const { reviews: liveReviews } = useLiveReviews(p.id, p.reviewsData ?? []);
+  const displayRating  = p.rating;
+  const displayReviews = p.reviews;
   const photos         = p.photos ?? [];
   const specialisms  = p.specialisms ?? [];
   const services     = p.services ?? [];
