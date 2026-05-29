@@ -1698,8 +1698,9 @@ details[open] .faq-item__q::after { content: '−'; }
 .pp-review header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .pp-review__avatar {
   width: 40px; height: 40px; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 18px;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: 17px; line-height: 1;
   flex-shrink: 0;
   /* background and color set dynamically per reviewer */
 }
