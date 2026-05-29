@@ -115,22 +115,27 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
           </div>
         )}
 
-        {/* Gallery */}
-        <div className="venue-gallery">
-          <button type="button" className="venue-gallery__main" onClick={() => setLightbox(0)} aria-label="Open photos">
-            <Image src={photos[0]} alt={`${v.name} wedding venue`} fill priority style={{ objectFit: 'cover' }} unoptimized />
+        {/* Gallery — explicit heights to prevent fill-image overflow */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 8, height: 480, borderRadius: 20, overflow: 'hidden', position: 'relative' }}>
+          <button type="button" style={{ border: 'none', padding: 0, cursor: 'pointer', overflow: 'hidden', height: 480 }}
+            onClick={() => setLightbox(0)} aria-label="Open photos">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={photos[0]} alt={`${v.name} wedding venue`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </button>
-          <div className="venue-gallery__grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, height: 480 }}>
             {[1, 2, 3, 4].map(i => (
-              <button key={i} type="button" className="venue-gallery__cell"
-                style={{ visibility: photos[i] ? 'visible' : 'hidden' }}
+              <button key={i} type="button"
+                style={{ border: 'none', padding: 0, cursor: 'pointer', overflow: 'hidden', visibility: photos[i] ? 'visible' : 'hidden', minHeight: 0 }}
                 onClick={() => setLightbox(i)} aria-label={`Photo ${i + 1}`}>
-                {photos[i] && <Image src={photos[i]} alt="" fill style={{ objectFit: 'cover' }} unoptimized />}
+                {photos[i] && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={photos[i]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                )}
               </button>
             ))}
           </div>
           {photos.length > 5 && (
-            <button type="button" className="venue-gallery__more" onClick={() => setLightbox(0)}>
+            <button type="button" className="venue-gallery__more" onClick={() => setLightbox(0)} style={{ position: 'absolute', bottom: 16, right: 16 }}>
               <Icon name="camera" size={14} /> Show all {photos.length} photos
             </button>
           )}
@@ -240,10 +245,24 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
             )}
 
             <h2>What makes {v.name} special</h2>
-            <ul>{v.pros.map((pro, i) => <li key={i}>{pro}</li>)}</ul>
+            <div className="venue-pros-grid">
+              {v.pros.map((pro, i) => (
+                <div key={i} className="venue-pros-item">
+                  <span className="venue-pros-item__ico"><Icon name="check" size={15} stroke={2.2} /></span>
+                  <p>{pro}</p>
+                </div>
+              ))}
+            </div>
 
             <h2>Things to know before booking</h2>
-            <ul>{v.things_to_know.map((t, i) => <li key={i}>{t}</li>)}</ul>
+            <div className="venue-know-list">
+              {v.things_to_know.map((t, i) => (
+                <div key={i} className="venue-know-item">
+                  <span className="venue-know-item__num">{String(i + 1).padStart(2, '0')}</span>
+                  <p>{t}</p>
+                </div>
+              ))}
+            </div>
 
             {/* Included vs Not included */}
             <h2>What&apos;s included vs not included</h2>

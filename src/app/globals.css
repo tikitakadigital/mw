@@ -1088,11 +1088,54 @@ details[open] .faq-item__q::after { content: '−'; }
   align-items: start;
 }
 .venue-body { display: flex; flex-direction: column; }
-.venue-body h2 { font-size: clamp(22px, 2.5vw, 30px); margin: 32px 0 12px; color: var(--ink); }
+.venue-body h2 { font-size: clamp(22px, 2.5vw, 30px); margin: 40px 0 14px; color: var(--ink); }
 .venue-body h2:first-of-type { margin-top: 0; }
-.venue-body p { font: var(--t-body-md); color: var(--body); margin-bottom: 12px; line-height: 1.7; }
-.venue-body ul { padding-left: 18px; margin-bottom: 20px; }
-.venue-body li { font: var(--t-body-md); color: var(--body); margin-bottom: 8px; padding-left: 4px; }
+.venue-body p { font: var(--t-body-md); color: var(--body); margin-bottom: 12px; line-height: 1.75; }
+.venue-body ul { list-style: none; padding: 0; margin-bottom: 20px; }
+.venue-body > ul > li {
+  padding: 12px 0 12px 28px; position: relative;
+  border-bottom: 1px solid var(--hairline-soft);
+  font: var(--t-body-md); color: var(--body);
+}
+.venue-body > ul > li::before {
+  content: ''; position: absolute; left: 0; top: 20px;
+  width: 14px; height: 1.5px; background: var(--primary);
+}
+
+/* Pros grid */
+.venue-pros-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 4px 0 32px;
+}
+.venue-pros-item {
+  display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start;
+  padding: 18px 20px;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.venue-pros-item__ico {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--primary-soft); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.venue-pros-item p { font: var(--t-body-sm); color: var(--body); margin: 0; }
+
+/* Things to know */
+.venue-know-list { display: flex; flex-direction: column; gap: 0; margin: 4px 0 32px; }
+.venue-know-item {
+  display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start;
+  padding: 18px 0; border-bottom: 1px solid var(--hairline-soft);
+}
+.venue-know-item:first-child { border-top: 1px solid var(--hairline-soft); }
+.venue-know-item__num {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: 28px; color: var(--primary); line-height: 1.1;
+}
+.venue-know-item p { font: var(--t-body-md); color: var(--body); margin: 0; padding-top: 4px; }
+
+@media (max-width: 600px) {
+  .venue-pros-grid { grid-template-columns: 1fr; }
+}
 
 .snapshot { border: 1px solid var(--hairline); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 8px; }
 .snapshot__row {
