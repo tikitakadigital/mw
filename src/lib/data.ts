@@ -291,7 +291,7 @@ export const PLANNERS: Planner[] = [
     minBudget: 20000, maxBudget: 200000,
     season: 'Year-round',
     price: 'POA',
-    rating: '4.98', reviews: 8,
+    rating: '4.8', reviews: 26,
     scene: 'bougainvil',
     img: '/img/couple-portrait.webp',
     featured: true,
