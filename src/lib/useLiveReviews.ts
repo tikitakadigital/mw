@@ -1,27 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import type { PlannerReview } from './types';
 
+// Reviews are hardcoded in data.ts for now.
+// When ready for dynamic reviews, re-implement fetch logic here.
 export function useLiveReviews(
-  plannerId: string,
+  _plannerId: string,
   fallback: PlannerReview[] = []
-): { reviews: PlannerReview[]; rating?: string; totalReviews?: number } {
-  const [reviews, setReviews] = useState<PlannerReview[]>(fallback);
-  const [rating, setRating] = useState<string | undefined>();
-  const [totalReviews, setTotalReviews] = useState<number | undefined>();
-
-  useEffect(() => {
-    // Try JSON file first (manual reviews), fall back to static data
-    fetch(`/api/reviews/${plannerId}.json`)
-      .then(r => { if (!r.ok) throw new Error('no json'); return r.json(); })
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) setReviews(data);
-      })
-      .catch(() => {
-        // JSON file doesn't exist — static data from data.ts is already set as initial state
-      });
-  }, [plannerId]);
-
-  return { reviews, rating, totalReviews };
+): { reviews: PlannerReview[] } {
+  return { reviews: fallback };
 }
