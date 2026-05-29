@@ -259,12 +259,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
                 {reviewsData.map((r, i) => (
                   <article key={i} className="pp-review">
                     <header>
-                      {r.photo ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={r.photo} alt={r.name} className="pp-review__avatar" style={{ objectFit: 'cover', borderRadius: '50%' }} />
-                      ) : (
-                        <span className="pp-review__avatar">{r.name[0]}</span>
-                      )}
+                      <span className="pp-review__avatar">{r.name[0]}</span>
                       <div>
                         <strong>{r.name}</strong>
                         <span>
