@@ -275,7 +275,15 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
                 {reviewsData.map((r, i) => (
                   <article key={i} className="pp-review">
                     <header>
-                      <span className="pp-review__avatar" style={{ background: avatarColour(r.name).bg, color: avatarColour(r.name).color }}>{r.name[0]}</span>
+                      <span style={{
+                        width: 40, height: 40, borderRadius: '50%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexShrink: 0, lineHeight: '1',
+                        fontFamily: 'var(--font-display)', fontStyle: 'italic',
+                        fontWeight: 500, fontSize: 17,
+                        background: avatarColour(r.name).bg,
+                        color: avatarColour(r.name).color,
+                      }}>{r.name[0]}</span>
                       <div>
                         <strong>{r.name}</strong>
                         <span>
