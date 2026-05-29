@@ -1133,8 +1133,50 @@ details[open] .faq-item__q::after { content: '−'; }
 }
 .venue-know-item p { font: var(--t-body-md); color: var(--body); margin: 0; padding-top: 4px; }
 
+/* Included vs Not included */
+.venue-incl-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  margin: 16px 0 40px;
+}
+.venue-incl-card {
+  border-radius: var(--radius-lg); padding: 28px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.venue-incl-card--yes { background: #f0f4eb; border: 1px solid #d4d8c0; }
+.venue-incl-card--no  { background: var(--surface); border: 1px solid var(--hairline); }
+.venue-incl-card__head {
+  display: flex; align-items: center; gap: 12px;
+}
+.venue-incl-card__head h3 {
+  font: 600 16px/1 var(--font-body); color: var(--ink); margin: 0;
+}
+.venue-incl-card__icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.venue-incl-card__icon--yes { background: var(--primary); color: #fff; }
+.venue-incl-card__icon--no  { background: var(--surface-strong); color: var(--muted); }
+.venue-incl-card ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.venue-incl-card li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+  font: var(--t-body-sm); color: var(--body);
+}
+.venue-incl-card li:last-child { border-bottom: none; }
+.venue-incl-card--yes li svg { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+.venue-incl-dash {
+  font: 600 16px/1.2 var(--font-body); color: var(--primary);
+  flex-shrink: 0; margin-top: 1px;
+}
+.venue-incl-note {
+  font: var(--t-caption); color: var(--muted); margin: 0;
+  padding-top: 12px; border-top: 1px solid var(--hairline-soft);
+}
+
 @media (max-width: 600px) {
   .venue-pros-grid { grid-template-columns: 1fr; }
+  .venue-incl-grid { grid-template-columns: 1fr; }
 }
 
 .snapshot { border: 1px solid var(--hairline); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 8px; }

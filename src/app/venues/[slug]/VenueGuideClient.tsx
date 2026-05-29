@@ -122,10 +122,10 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={photos[0]} alt={`${v.name} wedding venue`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </button>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, height: 480 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 8, height: 480 }}>
             {[1, 2, 3, 4].map(i => (
               <button key={i} type="button"
-                style={{ border: 'none', padding: 0, cursor: 'pointer', overflow: 'hidden', visibility: photos[i] ? 'visible' : 'hidden', minHeight: 0 }}
+                style={{ border: 'none', padding: 0, cursor: 'pointer', overflow: 'hidden', height: '100%', width: '100%', visibility: photos[i] ? 'visible' : 'hidden' }}
                 onClick={() => setLightbox(i)} aria-label={`Photo ${i + 1}`}>
                 {photos[i] && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -266,28 +266,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
 
             {/* Included vs Not included */}
             <h2>What&apos;s included vs not included</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, margin: '16px 0 32px' }}>
-              <div>
-                <h3 className="serif-h3" style={{ marginBottom: 8 }}>Included</h3>
-                <ul style={{ padding: 0, listStyle: 'none' }}>
-                  {v.includes.map((it, i) => (
-                    <li key={i} style={{ padding: '8px 0', display: 'grid', gridTemplateColumns: '20px 1fr', gap: 10, borderBottom: '1px solid var(--hairline-soft)', font: 'var(--t-body-md)' }}>
-                      <Icon name="check" size={16} /> <span>{it}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="serif-h3" style={{ marginBottom: 8 }}>Not included</h3>
-                <ul style={{ padding: 0, listStyle: 'none' }}>
-                  {v.notIncluded.map((it, i) => (
-                    <li key={i} style={{ padding: '8px 0', display: 'grid', gridTemplateColumns: '20px 1fr', gap: 10, borderBottom: '1px solid var(--hairline-soft)', font: 'var(--t-body-md)', color: 'var(--muted)' }}>
-                      <span>—</span><span>{it}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <IncludedSection includes={v.includes} notIncluded={v.notIncluded} />
 
             {/* Inline photo band */}
             {photos.length > 5 && (
@@ -403,6 +382,63 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
         <Lightbox photos={photos} index={lightbox} onClose={() => setLightbox(null)} setIndex={setLightbox} />
       )}
     </>
+  );
+}
+
+function IncludedSection({ includes, notIncluded }: { includes: string[]; notIncluded: string[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(Array.from(ref.current!.children),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.55, stagger: 0.06, ease: 'power3.out',
+          scrollTrigger: { trigger: ref.current, start: 'top 85%', once: true } }
+      );
+    }, ref);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="venue-incl-grid" ref={ref}>
+      {/* Included */}
+      <div className="venue-incl-card venue-incl-card--yes">
+        <div className="venue-incl-card__head">
+          <span className="venue-incl-card__icon venue-incl-card__icon--yes">
+            <Icon name="check" size={16} stroke={2.2} />
+          </span>
+          <h3>Included</h3>
+        </div>
+        <ul>
+          {includes.map((it, i) => (
+            <li key={i}>
+              <Icon name="check" size={14} stroke={2} />
+              <span>{it}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Not included */}
+      <div className="venue-incl-card venue-incl-card--no">
+        <div className="venue-incl-card__head">
+          <span className="venue-incl-card__icon venue-incl-card__icon--no">
+            <Icon name="close" size={14} stroke={2.2} />
+          </span>
+          <h3>Not included</h3>
+        </div>
+        <ul>
+          {notIncluded.map((it, i) => (
+            <li key={i}>
+              <span className="venue-incl-dash">+</span>
+              <span>{it}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="venue-incl-note">These are typically handled separately and can add €15–50k+ to the total.</p>
+      </div>
+    </div>
   );
 }
 
