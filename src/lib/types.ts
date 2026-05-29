@@ -123,6 +123,15 @@ export interface Venue {
   plannerIds: string[];
   metaTitle: string;
   metaDescription: string;
+  slug: string;           // keyword-exact URL slug e.g. "son-marroig-wedding-cost"
+  listBlurb: string;      // 1–2 sentence summary for the venue index row
+  exampleBudgets: ExampleBudget[];
+}
+
+export interface ExampleBudget {
+  h: string;     // heading e.g. "80-guest wedding"
+  range: string; // e.g. "€90,000 – €110,000"
+  body: string;  // 1 sentence explanation
 }
 
 export interface BlogPost {

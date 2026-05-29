@@ -405,6 +405,12 @@ export const VENUES: Venue[] = [
     plannerIds: ['sara', 'lina', 'marc'],
     metaTitle: 'Son Marroig Wedding Cost (2026 Guide) + Instant Budget Estimator',
     metaDescription: "Discover the real Son Marroig wedding cost in Mallorca for 2026. See realistic venue, catering and infrastructure budgets, hidden costs, and calculate your budget in 30 seconds.",
+    slug: 'son-marroig-wedding-cost',
+    listBlurb: "The island's most iconic ceremony location — a cliff-edge rotunda above the Mediterranean. A blank-canvas venue, which is why it sits at the premium end.",
+    exampleBudgets: [
+      { h: '80-guest wedding', range: '€90,000 – €110,000', body: 'Venue rental, premium catering, full lighting production, décor installations and guest transport coordination.' },
+      { h: '120-guest wedding', range: '€120,000 – €150,000+', body: "Larger weddings reach this range because of increased catering, logistics and infrastructure requirements." },
+    ],
   },
   {
     id: 'finca-comassema', name: 'Finca Comassema', region: 'Orient · Tramuntana mountains',
@@ -447,6 +453,12 @@ export const VENUES: Venue[] = [
     plannerIds: ['sara', 'pau', 'marc'],
     metaTitle: 'Finca Comassema Wedding Cost (2026 Guide) + Instant Budget Estimator',
     metaDescription: "Discover the real Finca Comassema wedding cost in Mallorca for 2026. See realistic venue, catering and infrastructure budgets, hidden costs, and calculate your budget in 30 seconds.",
+    slug: 'finca-comassema-wedding-cost',
+    listBlurb: 'A dramatic mountain estate in the Tramuntana near Orient. Large capacity and natural scenery make it a favourite for bigger weddings and multi-day weekends.',
+    exampleBudgets: [
+      { h: '80-guest wedding', range: '€80,000 – €100,000', body: 'Venue, mid-premium catering, lighting and a considered design. The most common Comassema wedding.' },
+      { h: '120-guest wedding', range: '€110,000 – €140,000+', body: "The venue's scale shines here — but catering, furniture and logistics rise with the guest count." },
+    ],
   },
   {
     id: 'finca-son-mir', name: 'Finca Son Mir', region: 'Algaida · 20 mins from Palma',
@@ -489,6 +501,12 @@ export const VENUES: Venue[] = [
     plannerIds: ['rocio', 'sara'],
     metaTitle: 'Finca Son Mir Wedding Cost (2026 Guide) + Instant Budget Estimator',
     metaDescription: "Discover the real Finca Son Mir wedding cost in Mallorca for 2026. See realistic venue, catering and infrastructure budgets, hidden costs, and calculate your budget in 30 seconds.",
+    slug: 'finca-son-mir-wedding-cost',
+    listBlurb: 'An established estate 20 minutes from Palma with large gardens and easy logistics — frequently chosen for bigger guest counts and weekend celebrations.',
+    exampleBudgets: [
+      { h: '80-guest wedding', range: '€75,000 – €95,000', body: 'Venue, mid-range catering, lighting and décor. The proximity to Palma keeps transport costs down.' },
+      { h: '120-guest wedding', range: '€100,000 – €135,000+', body: 'Comfortable at this scale thanks to spacious gardens and reception areas.' },
+    ],
   },
   {
     id: 'son-togores', name: 'Son Togores', region: 'Esporles · 20 mins from Palma',
@@ -531,6 +549,12 @@ export const VENUES: Venue[] = [
     plannerIds: ['lina', 'rocio'],
     metaTitle: 'Son Togores Wedding Cost (2026 Guide) + Instant Budget Estimator',
     metaDescription: "Discover the real Son Togores wedding cost in Mallorca for 2026. See realistic venue, catering and infrastructure budgets, hidden costs, and calculate your budget in 30 seconds.",
+    slug: 'son-togores-wedding-cost',
+    listBlurb: 'An elegant historic finca near Palma in Esporles. Logistically simpler than cliffside venues, which often makes it the more cost-efficient luxury option.',
+    exampleBudgets: [
+      { h: '80-guest wedding', range: '€75,000 – €95,000', body: 'Venue, mid-range catering, lighting and décor. Easier supplier access keeps infrastructure costs lower.' },
+      { h: '120-guest wedding', range: '€100,000 – €130,000+', body: 'Scales well while staying below comparable cliffside venues on total production cost.' },
+    ],
   },
   {
     id: 'finca-son-berga', name: 'Finca Son Berga', region: 'Alaró',
@@ -573,6 +597,12 @@ export const VENUES: Venue[] = [
     plannerIds: ['pau', 'marc'],
     metaTitle: 'Finca Son Berga Wedding Cost (2026 Guide)',
     metaDescription: "Realistic Finca Son Berga wedding cost in Mallorca for 2026. Venue, catering and infrastructure budgets, plus a free 30-second budget estimator.",
+    slug: 'finca-son-berga-wedding-cost',
+    listBlurb: 'A quieter working estate in the Alaró valley with almond groves and rustic luxury. One of the more affordable headline estates on the island.',
+    exampleBudgets: [
+      { h: '80-guest wedding', range: '€65,000 – €85,000', body: 'Venue, mid-range catering and a relaxed countryside production.' },
+      { h: '120-guest wedding', range: '€85,000 – €120,000+', body: 'Scales for larger weddings while staying among the more affordable estates.' },
+    ],
   },
 ];
 
