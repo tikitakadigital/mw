@@ -1,58 +1,82 @@
 [
   {
-    "name": "Tara & Frazier",
-    "date": "2024",
-    "guests": 60,
+    "name": "Paul Booth",
+    "date": "May 2026",
+    "guests": 0,
     "venue": "Mallorca",
-    "body": "Nothing was too much trouble and she saved us both so much time to concentrate on just enjoying ourselves."
+    "stars": 5,
+    "body": "We have recently returned from our daughter's wedding in Mallorca, organised by A White Hot Wedding, and had to leave a review. The team were absolutely incredible from start to finish.",
+    "source": "google",
+    "photo": ""
   },
   {
-    "name": "Rhiannon & Jack",
-    "date": "2024",
-    "guests": 80,
+    "name": "Joshua Dawson",
+    "date": "Feb 2024",
+    "guests": 0,
     "venue": "Mallorca",
-    "body": "Our planner remained calm and focused throughout and ensured that every single one of our guests had a great time."
+    "stars": 5,
+    "body": "If you're taking the time to read this review, hire A White Hot Wedding. We can't recommend them enough. They planned our wedding in Mallorca back in July 2023 and our only regret is that we can't get married twice.",
+    "source": "google",
+    "photo": ""
   },
   {
-    "name": "Donna & Christian",
-    "date": "2023",
-    "guests": 65,
+    "name": "Joyce Kim",
+    "date": "Aug 2025",
+    "guests": 0,
     "venue": "Mallorca",
-    "body": "All our guests enjoyed it. We didn't want our day to end. You were the perfect host and handled everything professionally."
+    "stars": 5,
+    "body": "Seamless execution, definite professionals with a great reputation across the island.",
+    "source": "google",
+    "photo": ""
   },
   {
-    "name": "Nicola & Andrew",
-    "date": "2023",
-    "guests": 70,
-    "venue": "Mallorca",
-    "body": "You guys took one conversation and turned it into a whole wedding. I am so glad I didn't have to find out."
+    "name": "samone Winsborough",
+    "date": "Aug 2025",
+    "guests": 0,
+    "venue": "Finca Son Vila",
+    "stars": 5,
+    "body": "We had a magical wedding at the beautiful Finca Son Vila! Being we were a destination wedding I cannot stress enough how important it is to have a reliable, professional team on the ground — and AWHW delivered exactly that.",
+    "source": "google",
+    "photo": ""
   },
   {
-    "name": "Anna & Chris",
-    "date": "2023",
-    "guests": 55,
+    "name": "Nicole Kirby",
+    "date": "Jan 2025",
+    "guests": 0,
     "venue": "Mallorca",
-    "body": "You worked so hard and managed to overcome all the problems, with no fuss. We all had a fantastic day."
+    "stars": 5,
+    "body": "From the second we reached out to AWHW they were amazing. They completely understood my vision and vibe from the get go.",
+    "source": "google",
+    "photo": ""
   },
   {
-    "name": "Nicky & Lewis",
-    "date": "2022",
-    "guests": 55,
-    "venue": "Mallorca",
-    "body": "She was actively involved but never over-bearing, found us some fantastic suppliers, provided solutions to all problems."
+    "name": "Amelia Crowther",
+    "date": "Jun 2024",
+    "guests": 0,
+    "venue": "Finca Son Mir",
+    "stars": 5,
+    "body": "We recently had the pleasure of using A White Hot Wedding for our wedding at Finca Son Mir, Mallorca, and we couldn't be more grateful. The team were exceptional.",
+    "source": "google",
+    "photo": ""
   },
   {
-    "name": "Lin & Leo",
-    "date": "2022",
+    "name": "Jamie Moore",
+    "date": "Feb 2024",
+    "guests": 0,
+    "venue": "Mallorca",
+    "stars": 5,
+    "body": "Olivia, Annie, and the whole team were a pleasure to work with. They effortlessly planned our wedding, which ran to perfection.",
+    "source": "google",
+    "photo": ""
+  },
+  {
+    "name": "Kate Hitchen",
+    "date": "Feb 2024",
     "guests": 45,
     "venue": "Mallorca",
-    "body": "Our planner was present throughout the whole day, dealt with any issues in her usual calm but assertive manner."
-  },
-  {
-    "name": "Alison & Grant",
-    "date": "2022",
-    "guests": 80,
-    "venue": "Mallorca",
-    "body": "It was exactly how I had envisaged it to be — they totally took on board everything I said."
+    "stars": 5,
+    "body": "Olivia and Annie organised the most special and personal wedding for us in May 2023 for 45 guests. They organised absolutely everything and we didn't have to worry about a thing on the day.",
+    "source": "google",
+    "photo": ""
   }
 ]
