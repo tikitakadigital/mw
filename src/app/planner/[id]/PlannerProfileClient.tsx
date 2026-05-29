@@ -93,12 +93,16 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           <p className="pp-hero__sig">&ldquo;{signatureLine}&rdquo;</p>
 
           <div className="pp-hero__badges">
-            {p.badges.map(b => (
-              <span key={b} className={`pp-badge ${b.toLowerCase().includes('verified') ? 'pp-badge--verified' : ''}`}>
-                {b.toLowerCase().includes('verified')
-                  ? <Icon name="check" size={12} stroke={2.4} />
-                  : <Icon name="star" size={12} />}
-                {b}
+            {/* Verified badge — only shown when actually verified */}
+            {isVerified && (
+              <span className="pp-badge pp-badge--verified">
+                <Icon name="check" size={12} stroke={2.4} /> Verified
+              </span>
+            )}
+            {/* Other badges (Guest favourite, LGBTQ+ friendly etc.) — always show */}
+            {p.badges.filter(b => !b.toLowerCase().includes('verified')).map(b => (
+              <span key={b} className="pp-badge">
+                <Icon name="star" size={12} /> {b}
               </span>
             ))}
           </div>
