@@ -31,10 +31,24 @@ $claim['status']      = 'approved';
 $claim['verified_at'] = date('c');
 file_put_contents($claim_file, json_encode($claim, JSON_PRETTY_PRINT));
 
+// Status file includes the planner's submitted profile data so the site can use it immediately
 file_put_contents($status_file, json_encode([
   'status'      => 'verified',
   'verified_at' => date('c'),
   'email'       => $claim['email'] ?? '',
+  // Profile fields the planner submitted — used by the site to override static data
+  'profile' => [
+    'name'      => $claim['name']      ?? null,
+    'firm'      => $claim['firm']      ?? null,
+    'bio'       => $claim['bio']       ?? null,
+    'services'  => $claim['services']  ?? null,
+    'languages' => $claim['languages'] ?? null,
+    'based'     => $claim['based']     ?? null,
+    'website'   => $claim['website']   ?? null,
+    'instagram' => $claim['instagram'] ?? null,
+    'phone'     => $claim['phone']     ?? null,
+    'email'     => $claim['email']     ?? null,
+  ],
 ]));
 
 $profile_url = SITE_URL . '/planner/' . $id . '/';

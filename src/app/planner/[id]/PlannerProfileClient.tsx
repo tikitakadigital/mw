@@ -8,6 +8,7 @@ import { VENUES, REAL_WEDDINGS } from '@/lib/data';
 import type { Planner, Venue } from '@/lib/types';
 import { useLiveReviews } from '@/lib/useLiveReviews';
 import { usePlannerStatus } from '@/lib/usePlannerStatus';
+import { useClaimedProfile } from '@/lib/useClaimedProfile';
 import ClaimBanner from '@/components/ClaimBanner';
 
 interface Props {
@@ -38,6 +39,17 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
   const { reviews: liveReviews } = useLiveReviews(p.id, p.reviewsData ?? []);
   const { status, claimEmail } = usePlannerStatus(p.id, p.verified);
   const isVerified = status === 'verified';
+  // Fetch self-submitted profile overrides for planners verified via claim flow
+  const claimed = useClaimedProfile(p.id, isVerified && !p.verified);
+
+  // Merge: claimed data takes priority over static data.ts for editable fields
+  const displayName      = claimed?.name      ?? p.name;
+  const displayFirm      = claimed?.firm      ?? p.firm;
+  const displayBio       = claimed?.bio       ?? p.bio;
+  const displayLanguages = claimed?.languages ? claimed.languages.split(',').map(l => l.trim()) : p.languages;
+  const displayBased     = claimed?.based     ?? p.based;
+  const displayInstagram = claimed?.instagram ?? p.instagram ?? null;
+  const displayWebsite   = claimed?.website   ?? null;
   const displayRating  = p.rating;
   const displayReviews = p.reviews;
   const photos         = p.photos ?? [];
@@ -49,10 +61,10 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
   const signatureLine  = p.signatureLine ?? p.tagline;
   const weddingsPerYear = p.weddingsPerYear ?? `${p.reviews}+ weddings`;
   const avgResponse    = p.avgResponse ?? p.response.replace(/^\d+%\s*within\s*/, '');
-  const instagram      = p.instagram ?? null;
+  const instagram      = displayInstagram;
   const nextAvailable  = p.nextAvailable ?? 'Reply within 24h with availability';
   const deposit        = p.deposit ?? 'Deposit confirms your date';
-  const firstName      = p.name.split(' ')[0];
+  const firstName      = displayName.split(' ')[0];
 
   const realWeddings = REAL_WEDDINGS.filter(w => w.plannerId === p.id);
 
@@ -76,8 +88,8 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
       <section className="pp-hero">
         <div className="pp-hero__copy">
           <span className="kicker">{p.location} · {p.style}</span>
-          <h1 className="pp-hero__name">{p.name}</h1>
-          <p className="pp-hero__firm">{p.firm}</p>
+          <h1 className="pp-hero__name">{displayName}</h1>
+          <p className="pp-hero__firm">{displayFirm}</p>
           <p className="pp-hero__sig">&ldquo;{signatureLine}&rdquo;</p>
 
           <div className="pp-hero__badges">
@@ -110,7 +122,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
               <span>avg response</span>
             </div>
             <div className="pp-stats__item">
-              <strong>{p.languages.length}</strong>
+              <strong>{displayLanguages.length}</strong>
               <span>languages</span>
             </div>
           </div>
@@ -121,7 +133,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           <div className="pp-gallery">
             <button type="button" className="pp-gallery__main" onClick={() => setLightbox(0)}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={photos[0]} alt={p.firm} />
+              <img src={photos[0]} alt={displayFirm} />
             </button>
             <div className="pp-gallery__grid">
               {[1, 2, 3, 4].map(i => (
@@ -151,10 +163,10 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           {/* About */}
           <div className="pp-section" style={{ borderTop: 'none', paddingTop: 0 }}>
             <h2>Meet {firstName}</h2>
-            <p style={{ font: 'var(--t-body-lg)', color: 'var(--body)', marginTop: 16, lineHeight: 1.7 }}>{p.bio}</p>
+            <p style={{ font: 'var(--t-body-lg)', color: 'var(--body)', marginTop: 16, lineHeight: 1.7 }}>{displayBio}</p>
             <div className="pp-meta-line">
-              <span><Icon name="globe" size={14} /> Speaks {p.languages.join(' · ')}</span>
-              <span><Icon name="pin" size={14} /> Based {p.based}</span>
+              <span><Icon name="globe" size={14} /> Speaks {displayLanguages.join(' · ')}</span>
+              <span><Icon name="pin" size={14} /> Based {displayBased}</span>
               {instagram && <span><Icon name="camera" size={14} /> {instagram}</span>}
             </div>
           </div>
@@ -175,13 +187,16 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
             </div>
           )}
 
-          {/* Services */}
-          {services.length > 0 && (
+          {/* Services — show structured data if available, otherwise claimed text */}
+          {(services.length > 0 || claimed?.services) && (
             <div className="pp-section">
               <h2>Services &amp; packages</h2>
               <p style={{ font: 'var(--t-body-md)', color: 'var(--muted)', marginTop: 8 }}>
-                All fees are flat — no supplier commissions.
+                {services.length > 0 ? 'All fees are flat — no supplier commissions.' : ''}
               </p>
+              {claimed?.services && services.length === 0 && (
+                <p style={{ font: 'var(--t-body-md)', color: 'var(--body)', whiteSpace: 'pre-line', marginTop: 12 }}>{claimed.services}</p>
+              )}
               <div className="pp-services">
                 {services.map((s, i) => (
                   <div key={i} className={`pp-service ${s.popular ? 'pp-service--popular' : ''}`}>
@@ -335,7 +350,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
             <div className="pp-map">
               <div className="pp-map__plate" style={{ background: 'linear-gradient(135deg, #c4c19a 0%, #7e8a5f 60%, #3c4326 100%)' }} />
               <div className="pp-map__pin"><Icon name="pin" size={16} /></div>
-              <span className="pp-map__caption">{p.based} · exact address shared after first call</span>
+              <span className="pp-map__caption">{displayBased} · exact address shared after first call</span>
             </div>
           </div>
 
@@ -391,7 +406,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
               <dt>Availability</dt><dd>{nextAvailable}</dd>
               <dt>Wedding range</dt><dd>{p.guests} guests</dd>
               <dt>Budget range</dt><dd>{p.price}</dd>
-              <dt>Languages</dt><dd>{p.languages.join(' · ')}</dd>
+              <dt>Languages</dt><dd>{displayLanguages.join(' · ')}</dd>
               <dt>Deposit</dt><dd>{deposit}</dd>
               <dt>Response</dt><dd>{p.response}</dd>
             </dl>
