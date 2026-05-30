@@ -671,7 +671,7 @@ function MatcherResults({ data, refined, onRefine, onRestart }: { data: MatcherD
           {top.map(({ p, score }, i) => (
             <Link key={p.id} href={`/planner/${p.id}`} className="result-card">
               <div className="result-card__photo">
-                <Image src={p.img} alt={p.name} width={72} height={72} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+                <Image src={p.img} alt={p.name} width={72} height={72} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 6, background: 'var(--surface)' }} unoptimized />
               </div>
               <div>
                 <span className="result-tag">Match #{i + 1} · {p.style}</span>

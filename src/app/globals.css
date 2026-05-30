@@ -529,10 +529,17 @@ textarea.input { resize: vertical; }
 .pcard:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
 .pcard__photo {
   aspect-ratio: 4/3; position: relative; overflow: hidden;
-  background: var(--surface-strong);
+  background: var(--surface);
+  border-bottom: 1px solid var(--hairline);
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px 32px;
 }
-.pcard__photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-.pcard:hover .pcard__photo img { transform: scale(1.04); }
+.pcard__photo img {
+  width: 100%; height: 100%;
+  object-fit: contain; /* logos need contain not cover */
+  transition: opacity 0.2s ease;
+}
+.pcard:hover .pcard__photo img { opacity: 0.8; }
 .pcard__badge {
   position: absolute; top: 12px; left: 12px;
   background: #fff; padding: 4px 10px;
@@ -816,8 +823,8 @@ details[open] .faq-item__q::after { content: '−'; }
   transition: border-color 0.15s, transform 0.15s;
 }
 .result-card:hover { border-color: var(--primary); transform: translateX(4px); }
-.result-card__photo { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; background: var(--surface-strong); }
-.result-card__photo img { width: 100%; height: 100%; object-fit: cover; }
+.result-card__photo { width: 64px; height: 64px; border-radius: 12px; overflow: hidden; background: var(--surface); border: 1px solid var(--hairline); display: flex; align-items: center; justify-content: center; padding: 6px; }
+.result-card__photo img { width: 100%; height: 100%; object-fit: contain; }
 .result-tag { font: 700 10px/1 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); display: block; margin-bottom: 4px; }
 .result-card__name { font-family: var(--font-display); font-size: 20px; color: var(--ink); }
 .result-card__sub { font: var(--t-caption); color: var(--muted); margin-top: 4px; }
