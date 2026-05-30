@@ -248,7 +248,7 @@ export const PLANNERS: Planner[] = [
     minBudget: 30000, maxBudget: 250000,
     season: 'Year-round', price: 'POA',
     rating: '5.0', reviews: 37, scene: 'olive',
-    img: '/img/wedding-detail.webp', featured: false,
+    img: '/img/logos/marcos.webp', featured: false,
     tagline: 'Bespoke weddings at exclusive Mallorca locations. 5.0 stars. 37 reviews.',
     signatureLine: 'My perfectionist eye for detail and 10 years directing events at luxury hotels — now entirely yours.',
     bio: "Marcos Rama was born in Switzerland to Spanish parents, studied International Hotel Management in Palma, and fell in love with Mallorca. After spending 10 years as Director of Events at prestigious luxury hotels across the island, he founded Pure Weddings Mallorca to bring that level of precision and hospitality to destination weddings. Marcos works alongside Manu, and together they're known for their attention to detail, constant communication, and an ability to make couples from North America, the UK and Europe feel completely at ease planning from abroad.",

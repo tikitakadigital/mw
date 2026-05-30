@@ -52,7 +52,9 @@ export default function PlannerCard({ planner, saved = false, onSave }: PlannerC
       </div>
       <span className="pcard__sub">{planner.location} · {planner.style}</span>
       <span className="pcard__sub">{planner.guests} guests · {planner.season}</span>
-      <span className="pcard__price">Planning from {planner.price.split('–')[0]}</span>
+      {planner.price !== 'POA' && (
+        <span className="pcard__price">Planning from {planner.price.split('–')[0]}</span>
+      )}
     </Link>
   );
 }
