@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 import Icon from './Icon';
 import type { Planner } from '@/lib/types';
@@ -25,13 +24,11 @@ export default function PlannerCard({ planner, saved = false, onSave }: PlannerC
   return (
     <Link href={`/planner/${planner.id}`} className="pcard">
       <div className="pcard__photo">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={planner.img}
           alt={planner.name}
-          width={400}
-          height={300}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          unoptimized
+          loading="lazy"
         />
         {planner.featured && <span className="pcard__badge">Guest favourite</span>}
         <button
