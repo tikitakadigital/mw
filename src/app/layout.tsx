@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -24,6 +25,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-GB">
+      {/* CookieYes loads first — consent must be established before GTM fires */}
+      <Script
+        id="cookieyes"
+        src="https://cdn-cookieyes.com/client_data/23363ec05238c61ebe15d35207286973/script.js"
+        strategy="beforeInteractive"
+      />
       <GoogleTagManager gtmId="GTM-WGTGQBK2" />
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
