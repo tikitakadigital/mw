@@ -38,15 +38,19 @@ export default function Footer() {
             <Link href="/standards">Editorial standards</Link>
             <Link href="/real-weddings">Real weddings</Link>
             <a href="mailto:hello@mallorcawedding.co.uk">Contact</a>
-            <a href="#">Privacy &amp; GDPR</a>
           </div>
         </div>
         <hr className="mw-footer__rule" />
         <div className="mw-footer__legal">
           <span>© 2026 Mallorca Wedding Exchange · An independent, data-driven marketplace</span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <Icon name="globe" size={14} /> English (UK) · £ GBP
-          </span>
+          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Link href="/privacy-policy" style={{ color: 'inherit', opacity: 0.5, fontSize: 12 }}>Privacy Policy</Link>
+            <Link href="/cookie-policy" style={{ color: 'inherit', opacity: 0.5, fontSize: 12 }}>Cookie Policy</Link>
+            <Link href="/terms" style={{ color: 'inherit', opacity: 0.5, fontSize: 12 }}>Terms of Use</Link>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <Icon name="globe" size={14} /> English (UK) · £ GBP
+            </span>
+          </div>
         </div>
       </div>
     </footer>
