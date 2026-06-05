@@ -13,7 +13,7 @@ export default function RealWeddingGallery({ photos, couple }: Props) {
       <div className="rw-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
         {photos.map((p, i) => (
           <button key={i} type="button" style={{ border: 'none', padding: 0, cursor: 'pointer', borderRadius: 'var(--radius-md)', overflow: 'hidden', aspectRatio: '4/3', display: 'block' }} onClick={() => setLb(i)}>
-            <Image src={p} alt="" width={400} height={300} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+            <Image src={p} alt={`${couple} wedding in Mallorca — photo ${i + 1}`} loading="lazy" width={400} height={300} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
           </button>
         ))}
       </div>

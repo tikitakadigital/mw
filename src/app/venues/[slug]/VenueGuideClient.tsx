@@ -113,7 +113,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
                 onClick={() => setLightbox(i)} aria-label={`Photo ${i + 1}`}>
                 {photos[i] && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={photos[i]} alt="" />
+                  <img src={photos[i]} alt={`${v.name} — ${v.region}, Mallorca`} loading="lazy" />
                 )}
               </button>
             ))}

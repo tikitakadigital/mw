@@ -291,7 +291,7 @@ export default function HomePage() {
           ].map(c => (
             <Link key={c.href} href={c.href} className="blog-card">
               <div className="blog-card__photo">
-                <Image src={c.img} alt="" width={400} height={250} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+                <Image src={c.img} alt={c.title} width={400} height={250} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
               </div>
               <span className="blog-card__cat">{c.cat}</span>
               <h3 className="blog-card__title">{c.title}</h3>

@@ -137,7 +137,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
           <div className="pp-gallery">
             <button type="button" className="pp-gallery__main" onClick={() => setLightbox(0)}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={photos[0]} alt={displayFirm} />
+              <img src={photos[0]} alt={`${displayFirm} — wedding planning in Mallorca`} fetchPriority="high" />
             </button>
             <div className="pp-gallery__grid">
               {[1, 2, 3, 4].map(i => (
@@ -146,7 +146,7 @@ export default function PlannerProfileClient({ planner: p, preferredVenues }: Pr
                   onClick={() => setLightbox(i)}>
                   {photos[i] && (
                     /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={photos[i]} alt="" />
+                    <img src={photos[i]} alt={`${displayFirm} wedding photography`} loading="lazy" />
                   )}
                 </button>
               ))}

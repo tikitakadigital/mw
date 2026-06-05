@@ -103,7 +103,7 @@ export default async function RealWeddingPage({ params }: Props) {
           {related.map(r => (
             <Link key={r.slug} href={`/real-weddings/${r.slug}`} className="blog-card">
               <div className="blog-card__photo">
-                <Image src={r.photos[0]} alt="" width={400} height={250} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
+                <Image src={r.photos[0]} alt={`${r.couple} wedding at ${r.venueName}, Mallorca`} width={400} height={250} style={{ width: '100%', height: '100%', objectFit: 'cover' }} unoptimized />
               </div>
               <span className="blog-card__cat">{r.month}</span>
               <h3 className="blog-card__title">{r.couple} · {r.venueName}</h3>
