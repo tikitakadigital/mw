@@ -11,7 +11,8 @@ const nextConfig: NextConfig = {
       { source: '/venue/finca-comassema',   destination: '/venues/finca-comassema-wedding-cost',   permanent: true },
       { source: '/venue/finca-son-mir',     destination: '/venues/finca-son-mir-wedding-cost',     permanent: true },
       { source: '/venue/son-togores',       destination: '/venues/son-togores-wedding-cost',       permanent: true },
-      { source: '/venue/finca-son-berga',   destination: '/venues/finca-son-berga-wedding-cost',   permanent: true },
+      { source: '/venue/finca-son-berga',    destination: '/venues/finca-son-berga-wedding-cost',    permanent: true },
+      { source: '/venue/finca-biniorella',  destination: '/venues/finca-biniorella-wedding-cost',  permanent: true },
     ];
   },
 };

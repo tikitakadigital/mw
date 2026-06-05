@@ -20,11 +20,12 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="mw-footer__head">Venue cost guides</h4>
-            <Link href="/venue/son-marroig">Son Marroig</Link>
-            <Link href="/venue/finca-comassema">Finca Comassema</Link>
-            <Link href="/venue/finca-son-mir">Finca Son Mir</Link>
-            <Link href="/venue/son-togores">Son Togores</Link>
-            <Link href="/venue/finca-son-berga">Finca Son Berga</Link>
+            <Link href="/venues/son-marroig-wedding-cost">Son Marroig</Link>
+            <Link href="/venues/finca-comassema-wedding-cost">Finca Comassema</Link>
+            <Link href="/venues/finca-son-mir-wedding-cost">Finca Son Mir</Link>
+            <Link href="/venues/son-togores-wedding-cost">Son Togores</Link>
+            <Link href="/venues/finca-son-berga-wedding-cost">Finca Son Berga</Link>
+            <Link href="/venues/finca-biniorella-wedding-cost">Finca Biniorella</Link>
           </div>
           <div>
             <h4 className="mw-footer__head">For planners</h4>
