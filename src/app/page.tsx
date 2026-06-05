@@ -285,7 +285,7 @@ export default function HomePage() {
         </header>
         <div className="cols-3">
           {[
-            { href: '/find-a-planner', img: '/img/couple-dancing.webp', cat: 'Planners', title: 'Find the best wedding planner in Mallorca', excerpt: 'A guide to choosing the right local planner for your wedding type and budget.' },
+            { href: '/find-a-planner', img: '/img/couple-confetti-exit.webp', cat: 'Planners', title: 'Find the best wedding planner in Mallorca', excerpt: 'A guide to choosing the right local planner for your wedding type and budget.' },
             { href: '/venue/son-marroig', img: '/img/son-marroig-5.webp', cat: 'Venue guide', title: 'Son Marroig wedding cost guide', excerpt: 'Real 2026 rental fees and total estimates for the most iconic venue on the island.' },
             { href: '/blog/realistic-budget-mallorca-wedding-2026', img: '/img/comassema-9.webp', cat: 'Budgeting', title: 'A realistic budget for a Mallorca wedding', excerpt: 'No "price on request" — real ranges by guest count, venue tier, and season.' },
           ].map(c => (

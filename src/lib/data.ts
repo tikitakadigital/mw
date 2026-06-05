@@ -19,7 +19,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@mireiabaroweddings', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/couple-hills.webp', '/img/wedding-detail.webp', '/img/couple-bouquet.webp', '/img/couple-portrait.webp', '/img/couple-veil.webp'],
+    photos: ['/img/couple-stone-wall-sunset.webp', '/img/wedding-table-stone-hall.webp', '/img/couple-golden-hour.webp', '/img/couple-portrait-gardens.webp', '/img/bride-stone-garden.webp'],
     specialisms: [
       { ico: 'gem',     t: 'Vogue & Harper\'s Bazaar', s: 'Mireia\'s weddings have been featured in the world\'s leading bridal publications.' },
       { ico: 'sparkle', t: 'Integral service',          s: 'Planning, design, décor, stationery, image consulting, honeymoon — all in one team.' },
@@ -76,7 +76,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@titila.es', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/couple-dancing.webp', '/img/couple-portrait.webp', '/img/wedding-detail.webp', '/img/comassema-9.webp', '/img/comassema-3.webp'],
+    photos: ['/img/bride-almond-blossom.webp', '/img/couple-portrait-gardens.webp', '/img/wedding-table-stone-hall.webp', '/img/comassema-9.webp', '/img/comassema-3.webp'],
     specialisms: [
       { ico: 'sparkles', t: 'Multi-cultural weddings', s: 'Hindu, Chinese, Spanish and international ceremonies. Laura has planned them all with the same care.' },
       { ico: 'sun',      t: 'Multi-day programmes',    s: 'Welcome dinners, ceremony days, day-after events — the full destination wedding weekend.' },
@@ -131,7 +131,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@mallorcaweddingplanners', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/couple-veil.webp', '/img/couple-bouquet.webp', '/img/wedding-detail.webp', '/img/son-marroig-9.webp', '/img/son-marroig-7.webp'],
+    photos: ['/img/couple-veil-embrace.webp', '/img/couple-golden-hour.webp', '/img/bride-stone-garden.webp', '/img/son-marroig-9.webp', '/img/son-marroig-7.webp'],
     specialisms: [
       { ico: 'gem',      t: 'Luxury production',      s: 'Full event production — lighting, florals, furniture, entertainment, all in-house.' },
       { ico: 'sun',      t: 'Multi-day celebrations',  s: 'Yacht days, welcome parties, ceremonies, pool parties — Charlotte coordinates the whole weekend.' },
@@ -195,7 +195,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@mallorca_boutique_weddings', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/couple-portrait.webp', '/img/couple-bouquet.webp', '/img/couple-dancing.webp', '/img/togores-3.webp', '/img/togores-6.webp'],
+    photos: ['/img/couple-portrait-gardens.webp', '/img/couple-golden-hour.webp', '/img/couple-confetti-exit.webp', '/img/togores-3.webp', '/img/togores-6.webp'],
     specialisms: [
       { ico: 'sparkle',  t: 'Boutique design',        s: 'Original, contemporary style brought to every wedding. Not a template in sight.' },
       { ico: 'globe',    t: 'International couples',   s: 'English, German and Spanish. Most clients are planning from the UK, US or Germany.' },
@@ -258,7 +258,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@pureweddingsmallorca', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/wedding-detail.webp', '/img/couple-hills.webp', '/img/couple-dancing.webp', '/img/comassema-7.webp', '/img/comassema-5.webp'],
+    photos: ['/img/wedding-table-stone-hall.webp', '/img/couple-stone-wall-sunset.webp', '/img/couple-confetti-exit.webp', '/img/comassema-7.webp', '/img/comassema-5.webp'],
     specialisms: [
       { ico: 'gem',     t: 'Luxury hotel expertise',   s: '10 years as Events Director at top Mallorca hotels. That standard now applied to weddings.' },
       { ico: 'globe',   t: 'International couples',    s: 'Marcos and Manu work with couples from North America, the UK, Switzerland and across Europe.' },
@@ -321,7 +321,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@wonderweddingses', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/couple-bouquet.webp', '/img/wedding-detail.webp', '/img/couple-veil.webp', '/img/togores-5.webp', '/img/son-marroig-8.webp'],
+    photos: ['/img/couple-golden-hour.webp', '/img/wedding-table-stone-hall.webp', '/img/couple-veil-embrace.webp', '/img/togores-5.webp', '/img/son-marroig-8.webp'],
     specialisms: [
       { ico: 'sparkles', t: 'Team of three',          s: 'Laura, Lorena and Elena — different strengths, one seamless experience.' },
       { ico: 'globe',    t: 'International couples',   s: 'Most clients plan from the UK, US or further afield. They make the distance feel like nothing.' },
@@ -394,7 +394,7 @@ export const PLANNERS: Planner[] = [
     nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/togores-3.webp', '/img/comassema-3.webp', '/img/son-marroig-7.webp', '/img/couple-portrait.webp', '/img/wedding-detail.webp'],
+    photos: ['/img/togores-3.webp', '/img/comassema-3.webp', '/img/son-marroig-7.webp', '/img/couple-portrait-gardens.webp', '/img/ceremony-rotunda-seaview.webp'],
     specialisms: [
       { ico: 'sparkles', t: 'Two planners, one day',    s: 'A partnership model — two professionals on-site means nothing gets missed.' },
       { ico: 'florist',  t: 'In-house florist & stylist', s: 'Florals, styling and décor handled in-house. Fewer suppliers, tighter design.' },
@@ -460,7 +460,7 @@ export const PLANNERS: Planner[] = [
     instagram: '@marrymemallorca', nextAvailable: 'Enquire for availability',
     deposit: 'Deposit on confirmation',
     badges: ['Verified'],
-    photos: ['/img/comassema-5.webp', '/img/couple-hills.webp', '/img/wedding-detail.webp', '/img/togores-5.webp', '/img/son-marroig-8.webp'],
+    photos: ['/img/comassema-5.webp', '/img/couple-stone-wall-sunset.webp', '/img/outdoor-reception-sparklers.webp', '/img/togores-5.webp', '/img/son-marroig-8.webp'],
     specialisms: [
       { ico: 'leaf',    t: 'Mediterranean aesthetic',  s: '"Sincere, almost silent luxury" — natural, organic, calm. The island at its best.' },
       { ico: 'globe',   t: 'Cultural bridge',          s: 'Yessi translates language, culture and expectations between couples, guests and local suppliers.' },
@@ -816,12 +816,12 @@ export const USE_CASES: UseCase[] = [
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
-  { slug: 'realistic-budget-mallorca-wedding-2026', title: 'A realistic budget for a Mallorca wedding in 2026', excerpt: 'No "price on request" — actual ranges for 80-guest weddings across the most-requested fincas and cliffside venues. Most fall between €70,000 and €110,000+.', category: 'Budgeting', img: '/img/couple-hills.webp', date: '12 March 2026', readTime: '8 min read', feature: true },
-  { slug: 'when-to-get-married-mallorca', title: 'When to get married in Mallorca — month-by-month', excerpt: "Heat, light, tourist crowds, and what the weather actually does in October. A planner's guide to picking your week.", category: 'Planning', img: '/img/couple-veil.webp', date: '28 April 2026', readTime: '6 min read' },
-  { slug: 'finca-vs-coastal-venue', title: 'Finca or coastal venue? How to choose for your guest count', excerpt: 'A practical comparison of the two main venue archetypes — costs, weather risk, and what each one is best for.', category: 'Venues', img: '/img/couple-dancing.webp', date: '14 April 2026', readTime: '7 min read' },
-  { slug: 'paperwork-civil-ceremony-spain', title: 'The paperwork: getting legally married in Spain as a UK couple', excerpt: 'Apostilles, residency timing, and why most UK couples do the legal part in a register office at home and the symbolic ceremony on the island.', category: 'Legal', img: '/img/couple-portrait.webp', date: '03 April 2026', readTime: '9 min read' },
-  { slug: 'guest-experience-2-day-weekend', title: 'Designing a two-day wedding weekend your guests will remember', excerpt: 'Welcome dinner, the wedding, and the Sunday paella — how to pace the weekend without exhausting anyone.', category: 'Inspiration', img: '/img/wedding-detail.webp', date: '21 March 2026', readTime: '5 min read' },
-  { slug: 'florists-stylists-mallorca', title: 'Working with Mallorca florists and stylists', excerpt: "What's in season, what to ask for, and why olive branches are everywhere (and that's fine).", category: 'Suppliers', img: '/img/couple-bouquet.webp', date: '09 March 2026', readTime: '6 min read' },
+  { slug: 'realistic-budget-mallorca-wedding-2026', title: 'A realistic budget for a Mallorca wedding in 2026', excerpt: 'No "price on request" — actual ranges for 80-guest weddings across the most-requested fincas and cliffside venues. Most fall between €70,000 and €110,000+.', category: 'Budgeting', img: '/img/wedding-table-stone-hall.webp', date: '12 March 2026', readTime: '8 min read', feature: true },
+  { slug: 'when-to-get-married-mallorca', title: 'When to get married in Mallorca — month-by-month', excerpt: "Heat, light, tourist crowds, and what the weather actually does in October. A planner's guide to picking your week.", category: 'Planning', img: '/img/couple-mediterranean-sunset.webp', date: '28 April 2026', readTime: '6 min read' },
+  { slug: 'finca-vs-coastal-venue', title: 'Finca or coastal venue? How to choose for your guest count', excerpt: 'A practical comparison of the two main venue archetypes — costs, weather risk, and what each one is best for.', category: 'Venues', img: '/img/ceremony-outdoor-arch.webp', date: '14 April 2026', readTime: '7 min read' },
+  { slug: 'paperwork-civil-ceremony-spain', title: 'The paperwork: getting legally married in Spain as a UK couple', excerpt: 'Apostilles, residency timing, and why most UK couples do the legal part in a register office at home and the symbolic ceremony on the island.', category: 'Legal', img: '/img/groom-signing-register.webp', date: '03 April 2026', readTime: '9 min read' },
+  { slug: 'guest-experience-2-day-weekend', title: 'Designing a two-day wedding weekend your guests will remember', excerpt: 'Welcome dinner, the wedding, and the Sunday paella — how to pace the weekend without exhausting anyone.', category: 'Inspiration', img: '/img/outdoor-reception-sparklers.webp', date: '21 March 2026', readTime: '5 min read' },
+  { slug: 'florists-stylists-mallorca', title: 'Working with Mallorca florists and stylists', excerpt: "What's in season, what to ask for, and why olive branches are everywhere (and that's fine).", category: 'Suppliers', img: '/img/couple-floral-arch.webp', date: '09 March 2026', readTime: '6 min read' },
 ];
 
 export const ARTICLE_BODIES: Record<string, ArticleBlock[]> = {
