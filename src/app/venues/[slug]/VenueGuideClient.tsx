@@ -79,7 +79,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
         </nav>
 
         <p className="kicker kicker--brand" style={{ marginBottom: 12 }}>
-          <Icon name="clock" size={12} /> Last updated March 2026 · 2026 Mallorca vendor pricing
+          <Icon name="clock" size={12} /> Last updated {v.lastUpdated ?? 'March 2026'} · 2026 Mallorca vendor pricing
         </p>
         <h1 className="serif-h1" style={{ fontStyle: 'italic', marginBottom: 8 }}>{v.name} wedding cost</h1>
         <p style={{ font: 'var(--t-body-md)', color: 'var(--muted)', marginBottom: 16 }}>
@@ -340,7 +340,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
             <div className="faq">
               {[
                 { q: `What is the minimum budget for a ${v.name} wedding?`, a: `Most weddings start around €${v.estTotal80.low.toLocaleString()}, with peak-season weddings often exceeding €${v.estTotal80.high.toLocaleString()}${v.id === 'son-marroig' ? '+' : ''}.` },
-                { q: 'Does the estimate include wedding planner fees?', a: "No. Wedding planners typically charge €6,000–€15,000+ depending on service level." },
+                { q: 'Does the estimate include wedding planner fees?', a: "No. Wedding planners typically charge €5,000–€15,000+ depending on service level. Note that Mallorca planners often quote net of 21% IVA — confirm whether VAT is included when comparing quotes." },
                 { q: 'Does the estimate include additional wedding events?', a: 'No. These estimates reflect the wedding day only. Welcome dinners and brunches can add €15–40k depending on scale.' },
                 { q: 'How far in advance should we book?', a: 'Peak Saturdays often book 12–18 months ahead. Shoulder-season and weekday dates have more availability at 8–10 months out.' },
               ].map((f, i) => (
@@ -353,7 +353,7 @@ export default function VenueGuideClient({ venue: v, matchedPlanners, alternativ
 
             {/* Methodology */}
             <h2>How this guide was put together</h2>
-            <p>This guide was updated in March 2026 using recent Mallorca wedding vendor pricing, venue planning benchmarks, and real production cost ranges{v.blankCanvas ? ' for blank-canvas wedding venues' : ' for private finca venues'}.</p>
+            <p>This guide was updated in {v.lastUpdated ?? 'March 2026'} using recent Mallorca wedding vendor pricing, venue planning benchmarks, and real production cost ranges{v.blankCanvas ? ' for blank-canvas wedding venues' : ' for private finca venues'}{v.lastUpdated ? ', cross-checked against 2026 published fee sheets and planner benchmarks' : ''}. All figures are modelled estimates — no venue publishes official hire fees.</p>
             <p>Final pricing varies by season, guest count, supplier selection and design complexity. The matcher uses the same benchmarks to give you a personalised range.</p>
 
             {/* Related guides */}

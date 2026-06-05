@@ -126,6 +126,7 @@ export interface Venue {
   slug: string;           // keyword-exact URL slug e.g. "son-marroig-wedding-cost"
   listBlurb: string;      // 1–2 sentence summary for the venue index row
   exampleBudgets: ExampleBudget[];
+  lastUpdated?: string;   // e.g. "June 2026" — overrides global date in guide header
 }
 
 export interface ExampleBudget {
